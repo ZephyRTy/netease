@@ -1,0 +1,10 @@
+{
+  "eslintIntegration": true,
+  "tabWidth": 4,
+  "useTabs": true,
+  "singleQuote": true,
+  "quoteProps": "preserve",
+  "semi": true,
+  "trailingComma": "none",
+  "endOfLine": "crlf"
+}
