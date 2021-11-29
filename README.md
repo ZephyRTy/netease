@@ -19,9 +19,10 @@
 	
 ### 文件结构
 - **src** 项目的源代码
-	- **component** 页面组件
-	- **style** css文件
+	- **component** 页面组件及其样式文件
+	- **style** 全局样式文件
 	- **utils** 非组件的函数与类
 	- *app* 根组件
 	- *index* 入口文件
 - **public** 静态文件资源
+- **docs** 项目文档
