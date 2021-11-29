@@ -1,12 +1,9 @@
 import React from 'react';
-import './App.css';
-import logo from './logo.svg';
-import Carouse from './components/carouse/Carouse';
+import './App.scss';
+import { MainContent } from './components/MainContent/MainContent';
 
 function App() {
-	return (
-		<Carouse />
-	);
+	return <MainContent />;
 }
 
 export default App;
