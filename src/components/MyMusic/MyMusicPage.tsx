@@ -29,7 +29,7 @@ export const MyMusicPage = () => {
 				onClick={async () => {
 					axios
 						.get(
-							`${serverPath}/user/playlist?uid=${user.id}&realIP=${realIP}&cookie=${user.cookie}`
+							`${serverPath}/user/playlist?uid=${user.uid}&realIP=${realIP}&cookie=${user.cookie}`
 						)
 						.then((res) => console.log(res));
 				}}
