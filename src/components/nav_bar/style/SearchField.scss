@@ -1,0 +1,36 @@
+* {
+  box-sizing: border-box;
+}
+
+
+
+.filter-list {
+  margin: auto;
+  width: 300px;
+  background: #3498db;
+  border: 1px solid darken(#3498db, 20%);
+  input {
+    width: 100%;
+    display: block;
+    padding: 10px;
+    border: 0;
+    font-size: 24px;
+    &:focus {
+      outline: none;
+    }
+  }
+  ul {
+    margin: 0;
+    padding: 0;
+    li {
+      list-style-type: none;
+      margin: 0;
+      color: white;
+      padding: 10px 20px;
+      border-top: 1px solid darken(#3498db, 20%);
+      &:hover {
+        background: #2980b9;
+      }
+    }
+  }
+}

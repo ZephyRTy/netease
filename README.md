@@ -13,6 +13,10 @@
 ## 技术选型
 	TS + React + mobx + scss
 
+
+## 开发环境
+	MacBookPro
+	
 ### 文件结构
 - **src** 项目的源代码
 	- **component** 页面组件及其样式文件
