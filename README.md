@@ -11,12 +11,8 @@
 	https://netease-cloud-music-api-ol9f71wh4-zephyrty.vercel.app/
 
 ## 技术选型
-	TS + React + mobx + scss
+	TS + React + mobx + scss + react-router + axios
 
-
-## 开发环境
-	MacBookPro
-	
 ### 文件结构
 - **src** 项目的源代码
 	- **component** 页面组件及其样式文件
