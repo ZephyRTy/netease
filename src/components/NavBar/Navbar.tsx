@@ -1,7 +1,7 @@
 import React from 'react';
-import { headerLinks } from '../../common/localData';
-import './style/NavbarItems.scss';
+import { headerLinks } from './common/localData';
 import SearchField from './SearchField';
+import './style/NavbarItems.scss';
 function Navbar() {
 	return (
 		<div className="NavbarWrapper">
@@ -13,7 +13,7 @@ function Navbar() {
 						</li>
 					);
 				})}
-                <SearchField />
+				<SearchField />
 				<button>登录</button>
 			</div>
 		</div>
