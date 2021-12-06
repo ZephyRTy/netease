@@ -2,40 +2,34 @@ import axios from 'axios';
 import React, { useEffect } from 'react';
 import { realIP, serverPath } from '../../utils/global';
 import { user } from '../../utils/user';
-export const MyMusicPage = () => {
+import { PlaylistsContainer } from './Playlists';
+import './style/myMusic.scss';
+export const MyMusicPage = (props: { user: typeof user }) => {
 	useEffect(() => {
-		axios
-			.get(`${serverPath}/login/cellphone`, {
-				params: {
-					phone: '15527657001',
-					password: 'yty7895123',
-					timestamp: new Date().getTime(),
-					realIP
-				}
-			})
-			.then((res) => {
-				console.log(res);
-				user.LogIn(res.data.account.id, res.data.cookie);
-			})
-			.catch((err) => console.log(err));
+		props.user.LogIn('15527657001', 'yty7895123');
 		return () => {
 			console.log('log out');
-			user.LogOut();
+			props.user.LogOut();
 		};
 	}, []);
 	return (
-		<div>
+		<div className="myMusic-container">
 			<button
 				onClick={async () => {
+					if (props.user.cookie.length < 1) {
+						return;
+					}
 					axios
 						.get(
-							`${serverPath}/user/playlist?uid=${user.uid}&realIP=${realIP}&cookie=${user.cookie}`
+							`${serverPath}/playlist/detail?id=408046442&realIP=${realIP}&cookie=${user.cookie}`
 						)
 						.then((res) => console.log(res));
 				}}
+				style={{ position: 'absolute' }}
 			>
 				1
 			</button>
+			<PlaylistsContainer user={user} />
 		</div>
 	);
 };
