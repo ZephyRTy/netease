@@ -1,8 +1,7 @@
-import axios from 'axios';
 import React, { useEffect } from 'react';
-import { realIP, serverPath } from '../../utils/global';
 import { user } from '../../utils/user';
 import { PlaylistsContainer } from './Playlists';
+import { SongListContain } from './SongList';
 import './style/myMusic.scss';
 export const MyMusicPage = (props: { user: typeof user }) => {
 	useEffect(() => {
@@ -14,22 +13,8 @@ export const MyMusicPage = (props: { user: typeof user }) => {
 	}, []);
 	return (
 		<div className="myMusic-container">
-			<button
-				onClick={async () => {
-					if (props.user.cookie.length < 1) {
-						return;
-					}
-					axios
-						.get(
-							`${serverPath}/playlist/detail?id=408046442&realIP=${realIP}&cookie=${user.cookie}`
-						)
-						.then((res) => console.log(res));
-				}}
-				style={{ position: 'absolute' }}
-			>
-				1
-			</button>
 			<PlaylistsContainer user={user} />
+			<SongListContain />
 		</div>
 	);
 };

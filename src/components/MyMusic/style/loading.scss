@@ -1,0 +1,26 @@
+.loading {
+	display: block;
+	position: relative;
+	font-size: 30px;
+	font-weight: bolder;
+	width: 200px;
+	margin: 0 auto;
+	top: 400px;
+	background-clip: text;
+	color: transparent;
+	animation: neon 2s ease-in-out infinite;
+}
+
+@keyframes neon {
+	0%,
+	100% {
+		text-shadow: 0 0 8px #fa1c16, 0 0 6px #fa1c16, 0 0 10px #fa1c16,
+			0 0 10px #fa1c16, 0 0 4px #fed128, 5px 5px 5px #806914;
+		color: #fffc00;
+	}
+	50% {
+		text-shadow: 0 0 5px #800e0b, 0 0 1.5px #af1510, 0 0 5px #ac1510,
+			0 0 5px #a0130e, 0 0 0.2px #80400b, 5px 5px 0.1px #959316;
+		color: #a1a321;
+	}
+}
