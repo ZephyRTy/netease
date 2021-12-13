@@ -1,0 +1,13 @@
+.song-detail {
+	&-contain {
+		position: relative;
+		float: right;
+		width: 72%;
+	}
+	&-list {
+		list-style: none;
+		&-item {
+			font-size: small;
+		}
+	}
+}
