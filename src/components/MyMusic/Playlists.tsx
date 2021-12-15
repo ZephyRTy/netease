@@ -1,9 +1,12 @@
 import { observer } from 'mobx-react-lite';
 import React, { useState } from 'react';
-import { cookie } from '../../utils/global';
+import { active } from '../../utils/global';
 import { PlayList } from '../../utils/playList';
 import { user } from '../../utils/user';
 import './style/playlist.scss';
+
+// 歌单列表的展示组件
+
 const PlaylistItem = (props: { playlist: PlayList }) => {
 	return (
 		<li className="playlist-item">
@@ -11,15 +14,16 @@ const PlaylistItem = (props: { playlist: PlayList }) => {
 				<img
 					alt=""
 					className="playlist-item-cover"
-					src={props.playlist.coverImgUrl}
+					src={props.playlist.cover}
 				/>
 				<div className="playlist-item-info">
 					<span className="playlist-item-info-name">
 						<a
 							className="playlist-item-info-link"
-							href="javascript:void(0)"
-							onClick={() => {
-								props.playlist.getTracks(cookie.get());
+							href="#!"
+							onClick={(e) => {
+								e.preventDefault();
+								active.mount(props.playlist);
 							}}
 						>
 							{props.playlist.name}
@@ -33,6 +37,7 @@ const PlaylistItem = (props: { playlist: PlayList }) => {
 		</li>
 	);
 };
+
 const Playlist = (props: { playlists: PlayList[]; title: string }) => {
 	const [open, setOpen] = useState(true);
 	return (
@@ -57,7 +62,8 @@ const Playlist = (props: { playlists: PlayList[]; title: string }) => {
 		</div>
 	);
 };
-export const PlaylistsContainer = observer((props: { user: typeof user }) => {
+
+export const PlaylistsWrapper = observer((props: { user: typeof user }) => {
 	return (
 		<div className="playlist-container">
 			{props.user._infoLoaded ? (
