@@ -1,9 +1,9 @@
 import React from 'react';
 import './App.scss';
 import { MainContent } from './components/MainContent/MainContent';
-import { IndexPage } from './components/Discovery/Index/IndexPage';
+
 function App() {
-	return <IndexPage />;
+	return <MainContent />;
 }
 
 export default App;
