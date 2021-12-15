@@ -1,8 +1,8 @@
 import React from 'react';
 import { headerLinks } from './common/localData';
-import SearchField from './SearchField';
+import {SearchField} from './SearchField';
 import './style/NavbarItems.scss';
-function Navbar() {
+export const  Navbar = () => {
 	return (
 		<div className="NavbarWrapper">
 			<div className="CategoryList">
@@ -20,4 +20,4 @@ function Navbar() {
 	);
 }
 
-export default Navbar;
+
