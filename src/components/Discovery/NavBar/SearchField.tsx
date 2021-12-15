@@ -1,7 +1,7 @@
 import React from 'react';
 import './style/SearchField.scss';
 
-function SearchField() {
+export const SearchField = () => {
 	return (
 		<div className="filter-list">
 			<input
@@ -17,4 +17,4 @@ function SearchField() {
 	);
 }
 
-export default SearchField;
+
