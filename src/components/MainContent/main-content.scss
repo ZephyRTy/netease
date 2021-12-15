@@ -1,9 +1,9 @@
 .main-content {
+	position: relative;
 	display: flex;
 	justify-content: center;
-	background-color: rgba(228, 228, 228, 0.671);
+	background-color: white;
 	width: 980px;
 	margin: 0 auto;
-	height: fit-content;
 	min-height: 100vh;
 }

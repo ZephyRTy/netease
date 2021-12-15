@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { user } from '../../utils/user';
-import { PlaylistsContainer } from './Playlists';
-import { SongListContain } from './SongList';
+import { PlaylistsWrapper } from './Playlists';
+import { SongListWrapper } from './SongList';
 import './style/myMusic.scss';
 export const MyMusicPage = (props: { user: typeof user }) => {
 	useEffect(() => {
@@ -13,8 +13,8 @@ export const MyMusicPage = (props: { user: typeof user }) => {
 	}, []);
 	return (
 		<div className="myMusic-container">
-			<PlaylistsContainer user={user} />
-			<SongListContain />
+			<PlaylistsWrapper user={user} />
+			<SongListWrapper />
 		</div>
 	);
 };
