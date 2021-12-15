@@ -1,13 +1,124 @@
+@mixin info-span($width) {
+	display: inline-block;
+	width: $width;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
 .song-detail {
-	&-contain {
+	&-wrapper {
 		position: relative;
+		left: 2px;
 		float: right;
-		width: 72%;
+		width: 74%;
+		box-shadow: 2px -4px 4px 0 #bdbdbdde;
+		th {
+			height: 30px;
+			font-size: medium;
+			font-weight: normal;
+			background-image: linear-gradient(white, #d7d7d7);
+			box-shadow: 1px 0px 5px 0px grey;
+			text-align: left;
+			span {
+				padding-left: 15px;
+			}
+		}
+		thead {
+			border-top: 2px red solid;
+		}
+	}
+	&-table {
+		width: 100%;
+		table-layout: fixed;
+		border-collapse: collapse;
+		border-bottom: 2px solid #bdbdbdde;
 	}
 	&-list {
+		width: 100%;
+		padding: 0;
 		list-style: none;
 		&-item {
+			height: 40px;
+			align-items: center;
 			font-size: small;
+			span {
+				margin-left: 10px;
+				cursor: default;
+			}
+			&-index {
+				margin: 0 10px;
+				text-align: center;
+				color: gray;
+				&-span {
+					display: inline-block;
+					width: 20px;
+					line-height: 24px;
+					margin: {
+						right: 17px;
+					}
+				}
+			}
+			&-name {
+				width: 300px;
+				&-span {
+					@include info-span(200px);
+					padding: {
+						right: 30px;
+					}
+				}
+			}
+			&-duration {
+				&-span {
+					@include info-span(50px);
+				}
+			}
+			&-artists {
+				&-span {
+					@include info-span(90px);
+				}
+			}
+			&-album {
+				&-span {
+					@include info-span(100px);
+				}
+			}
 		}
+		&-title {
+			&-index {
+				width: 10%;
+				border: {
+					left: none !important;
+				}
+			}
+			&-name {
+				width: 35%;
+			}
+			&-duration {
+				width: 15%;
+			}
+			&-artists {
+				width: 20%;
+			}
+			&-album {
+				width: 17%;
+			}
+		}
+	}
+}
+
+.odd {
+	background-color: transparent;
+}
+.even {
+	background-color: #ebebeb;
+}
+
+.play-icon {
+	margin-right: 10px;
+	font-size: 20px;
+	color: rgba(189, 189, 189, 0.78);
+	&:hover {
+		color: rgb(146, 146, 146);
 	}
 }
