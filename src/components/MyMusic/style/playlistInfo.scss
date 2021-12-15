@@ -1,0 +1,43 @@
+.playlist-info {
+	&-wrapper {
+		margin: 30px 20px;
+		display: flex;
+	}
+	&-cover {
+		width: 220px;
+		padding: 10px;
+		&-wrapper {
+			width: fit-content;
+			border: 1px solid gainsboro;
+			margin: {
+				left: 20px;
+				right: 30px;
+			}
+		}
+	}
+	&-intro {
+		display: flex;
+		flex-direction: column;
+	}
+	&-name {
+		font-size: 22px;
+		font-weight: 500;
+	}
+	&-description {
+		margin-top: 30px;
+		font-size: 10px;
+		height: 80px;
+		word-break: break-all;
+		text-overflow: ellipsis;
+		display: -webkit-box;
+		/** 对象作为伸缩盒子模型显示 **/
+		-webkit-box-orient: vertical;
+		/** 设置或检索伸缩盒对象的子元素的排列方式 **/
+		-webkit-line-clamp: 2;
+		/** 显示的行数 **/
+		overflow: hidden;
+		/** 隐藏超出的内容 **/
+		word-wrap: break-word;
+		/*英文强制换行*/
+	}
+}
