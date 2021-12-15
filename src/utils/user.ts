@@ -25,11 +25,14 @@ class User {
 	personalInfo: any = null;
 	nickName: string = ''; //用户昵称
 
-	subPlaylists = observable.array([] as PlayList[]);
-	createdPlaylists = observable.array([] as PlayList[]);
+	//! 歌单数组为可观察对象，因此不能改变列表的引用
+	readonly subPlaylists = [] as PlayList[];
+	readonly createdPlaylists = [] as PlayList[];
 
 	constructor() {
 		makeObservable(this, {
+			subPlaylists: observable,
+			createdPlaylists: observable,
 			_LogStatus: observable,
 			_infoLoaded: observable,
 			LogIn: action,
@@ -43,6 +46,8 @@ class User {
 	 * @param password 用户的密码
 	 */
 	async LogIn(phone: string, password: string, mode: string = 'cellphone') {
+		this.createdPlaylists.length = 0;
+		this.subPlaylists.length = 0;
 		await axios
 			.get(`${serverPath}/login/${mode}`, {
 				params: {
@@ -78,8 +83,8 @@ class User {
 		axios.get(`${serverPath}/logout?realIP=${realIP}`);
 		cookie.set('');
 		this._uid = '';
-		this.createdPlaylists.clear();
-		this.subPlaylists.clear();
+		this.createdPlaylists.length = 0;
+		this.subPlaylists.length = 0;
 		this._LogStatus = false;
 	}
 
@@ -92,28 +97,38 @@ class User {
 				`${serverPath}/user/playlist?uid=${this._uid}&realIP=${realIP}`
 			)
 			.then((res) => {
-				this.createdPlaylists = res.data.playlist
-					.slice(0, this.createdPlaylistCount)
-					.map((v: any, i: number) => {
-						return i
-							? new PlayList(v, cookie.get())
-							: new PlayList(v, cookie.get(), true);
-					});
-				this.subPlaylists = res.data.playlist
-					.slice(this.createdPlaylistCount)
-					.map((v: any) => new PlayList(v, cookie.get()));
+				this.createdPlaylists.push(
+					...res.data.playlist
+						.slice(0, this.createdPlaylistCount)
+						.map((v: any, i: number) => {
+							return i === 0
+								? new PlayList(v, cookie.get(), true)
+								: new PlayList(v, cookie.get());
+						})
+				);
+				this.subPlaylists.push(
+					...res.data.playlist
+						.slice(this.createdPlaylistCount)
+						.map((v: any) => new PlayList(v, cookie.get()))
+				);
 				this._infoLoaded = true;
 			});
 	}
 
+	/**
+	 * 添加歌单
+	 * @param playListId 要添加的歌单id
+	 * @param mode 添加到哪个歌单列表中
+	 */
 	add(playListId: string, mode: 'created' | 'sub' = 'created') {
 		const sym = mode === 'created' ? 'createdPlaylists' : 'subPlaylists';
 		this[sym].push(new PlayList(playListId, cookie.get()));
 	}
 
 	/**
-	 * 从歌单中删除歌曲
-	 * @param trackId 要删除的歌曲id
+	 * 从歌单列表中删除歌单
+	 * @param playListId 要删除的歌单id
+	 * @param mode 从哪个歌单列表中删除
 	 */
 	delete(playListId: string, mode: 'created' | 'sub' = 'created') {
 		const sym = mode === 'created' ? 'createdPlaylists' : 'subPlaylists';
