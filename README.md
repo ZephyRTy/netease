@@ -8,7 +8,7 @@
 	76.223.126.88 API服务器部署在vercel上
 
 ## API服务器网址
-	https://netease-1cloud-music-api-ol9f71wh4-zephyrty.vercel.app/
+	https://netease-cloud-music-api-ol9f71wh4-zephyrty.vercel.app/
 
 ## 技术选型
 	TS + React + mobx + scss + react-router + axios
