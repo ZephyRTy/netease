@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { action, makeObservable, observable } from 'mobx';
+import { action, makeObservable, observable, runInAction } from 'mobx';
 import { cookie, realIP, serverPath } from './global';
 import { PlayList } from './playList';
 
@@ -67,12 +67,12 @@ class User {
 				this.nickName = this.profile.nickName;
 			})
 			.catch((err) => console.log(err));
-		axios
+		await axios
 			.get(
 				`${serverPath}/user/subcount?realIP=${realIP}&cookie=${cookie.get()}`
 			)
 			.then((res) => (this._subInfo = res.data));
-		await this.getAllPlaylists();
+		this.getAllPlaylists();
 	}
 
 	/**
@@ -97,21 +97,21 @@ class User {
 				`${serverPath}/user/playlist?uid=${this._uid}&realIP=${realIP}`
 			)
 			.then((res) => {
-				this.createdPlaylists.push(
-					...res.data.playlist
-						.slice(0, this.createdPlaylistCount)
-						.map((v: any, i: number) => {
-							return i === 0
-								? new PlayList(v, cookie.get(), true)
-								: new PlayList(v, cookie.get());
-						})
-				);
-				this.subPlaylists.push(
-					...res.data.playlist
-						.slice(this.createdPlaylistCount)
-						.map((v: any) => new PlayList(v, cookie.get()))
-				);
-				this._infoLoaded = true;
+				runInAction(() => {
+					this.createdPlaylists.push(
+						...res.data.playlist
+							.slice(0, this.createdPlaylistCount)
+							.map((v: any) => {
+								return new PlayList(v, cookie.get());
+							})
+					);
+					this.subPlaylists.push(
+						...res.data.playlist
+							.slice(this.createdPlaylistCount)
+							.map((v: any) => new PlayList(v, cookie.get()))
+					);
+					this._infoLoaded = true;
+				});
 			});
 	}
 
@@ -134,6 +134,19 @@ class User {
 		const sym = mode === 'created' ? 'createdPlaylists' : 'subPlaylists';
 		const index = this[sym].findIndex((elem) => elem.id === playListId);
 		this[sym].splice(index, 1);
+	}
+
+	/**
+	 *
+	 * @param playlistId 要获取的歌单id
+	 * @returns id对应的歌单
+	 */
+	find(playlistId: string | undefined) {
+		if (!playlistId) return this.createdPlaylists[0];
+		return (
+			this.createdPlaylists.find((e) => e.id === playlistId) ||
+			this.subPlaylists.find((e) => e.id === playlistId)
+		);
 	}
 	/**
 	 * 用户uid的访问器
