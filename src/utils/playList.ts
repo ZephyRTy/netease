@@ -1,17 +1,17 @@
 import axios from 'axios';
-import { makeObservable, observable } from 'mobx';
-import { Comment } from './comment';
-import { active, realIP, serverPath } from './global';
+import { makeObservable, observable, runInAction } from 'mobx';
+import { CommentList } from './comment';
+import { realIP, serverPath } from './global';
 import { Song } from './song';
 export class PlayList {
 	private _id: string = ''; // 歌单的id
 	private _name: string = ''; // 歌单名称
 	private _count = 0; // 歌单中歌曲的数量
 	private _description = '';
-	private _comments = [] as Comment[];
+	commentList = new CommentList();
 	private _coverImgUrl: string = ''; // 歌单封面
 
-	//! 歌单数组为可观察对象，因此不能改变列表的引用
+	//! 歌曲数组为可观察对象，因此不能改变列表的引用
 	readonly trackIds = [] as string[]; //歌单中所有歌曲的id
 
 	/**
@@ -19,20 +19,14 @@ export class PlayList {
 	 * @param id 歌单的id
 	 * @param cookie 用户的cookie，在PlayList中仅用与请求歌单信息，不做保存
 	 */
-	constructor(listInfo: any, cookie: string, defaultTrack: boolean = false) {
+	constructor(listInfo: any, cookie: string) {
 		makeObservable(this, { trackIds: observable });
 		this._id = listInfo.id.toString();
 		this._name = listInfo.name;
 		this._coverImgUrl = listInfo.coverImgUrl;
 		this._count = listInfo.trackCount;
 		try {
-			this.getDetail(cookie).then(() => {
-				if (defaultTrack) {
-					active.mount(this);
-					//this.getTracks(cookie);
-					//this.getComments(cookie);
-				}
-			});
+			this.getDetail(cookie);
 		} catch (err) {
 			console.log(err);
 		}
@@ -48,10 +42,12 @@ export class PlayList {
 				`${serverPath}/playlist/detail?id=${this._id}&realIP=${realIP}&cookie=${cookie}`
 			)
 			.then((res) => {
-				this._description = res.data.playlist.description;
-				this.trackIds.push(
-					...res.data.playlist.trackIds.map((v: any) => v.id)
-				);
+				runInAction(() => {
+					this._description = res.data.playlist.description;
+					this.trackIds.push(
+						...res.data.playlist.trackIds.map((v: any) => v.id)
+					);
+				});
 			})
 			.catch(console.log);
 	}
@@ -61,26 +57,8 @@ export class PlayList {
 	 * @param cookie
 	 * @param setState  React组件中的setState函数
 	 */
-	getComments(cookie: string, setState: any) {
-		axios
-			.get(
-				`${serverPath}/comment/playlist?id=${this._id}&realIP=${realIP}&cookie=${cookie}`
-			)
-			.then((res) => {
-				console.log(res);
-				this._comments = res.data.comments.map(
-					(v: any) =>
-						new Comment(
-							v.user.nickname,
-							v.content,
-							v.timeStr,
-							v.user.avatarUrl
-						)
-				);
-				setState(this._comments);
-				//active.commentStatus = true;
-			})
-			.catch(console.log);
+	getComments(setState: any) {
+		this.commentList.getComments(setState, this.id, 'playlist');
 	}
 
 	/**
@@ -88,7 +66,8 @@ export class PlayList {
 	 * @param cookie
 	 * @param setState React组件中的setState函数
 	 */
-	getTracks(cookie: string, setState: any) {
+	getSongs(cookie: string, setState: any) {
+		if (this.trackIds.length === 0) return;
 		axios
 			.get(
 				`${serverPath}/song/detail?ids=${this.trackIds.join(
@@ -96,6 +75,8 @@ export class PlayList {
 				)}&realIP=${realIP}&cookie=${cookie}`
 			)
 			.then((res) => {
+				console.log(res.data.songs[0]);
+
 				setState(
 					res.data.songs.map(
 						(v: any) =>
@@ -157,10 +138,6 @@ export class PlayList {
 
 	get description() {
 		return this._description;
-	}
-
-	get comments() {
-		return this._comments;
 	}
 
 	get cover() {
