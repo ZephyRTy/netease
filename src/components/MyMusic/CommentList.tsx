@@ -1,7 +1,6 @@
 import { observer } from 'mobx-react';
 import React, { useEffect, useState } from 'react';
 import { Comment } from '../../utils/comment';
-import { cookie } from '../../utils/global';
 import { PlayList } from '../../utils/playList';
 import './style/commentList.scss';
 
@@ -11,10 +10,13 @@ import './style/commentList.scss';
 const CommentItem = (props: { comment: Comment }) => {
 	const [avatar, setAvatar] = useState('');
 	useEffect(() => {
-		const img = new Image();
+		let img = new Image();
 		img.src = props.comment.avatar;
 		img.onload = () => {
 			setAvatar(img.src);
+			img.onload = null;
+		};
+		return () => {
 			img.onload = null;
 		};
 	}, [props.comment]);
@@ -43,26 +45,24 @@ const CommentListTitle = () => {
 		</div>
 	);
 };
-export const CommentList = observer(
-	(props: {
-		active: {
-			activePlaylist: PlayList;
-		};
-	}) => {
-		const [comments, setComments] = useState([] as Comment[]);
-		useEffect(() => {
-			setComments([]);
-			props.active.activePlaylist?.getComments(cookie.get(), setComments);
-		}, [props.active.activePlaylist]);
-		return (
-			<div className="comment-wrapper">
-				<CommentListTitle />
-				<ul className="comment-list">
-					{comments.map((v, i) => (
-						<CommentItem comment={v} key={i} />
-					))}
-				</ul>
-			</div>
-		);
-	}
-);
+export const CommentList = observer((props: { active: PlayList }) => {
+	const [comments, setComments] = useState([] as Comment[]);
+	useEffect(() => {
+		setComments([]);
+		props.active?.getComments(setComments);
+	}, [props.active]);
+	return (
+		<div className="comment-wrapper">
+			<CommentListTitle />
+			{comments.length ? (
+				<>
+					<ul className="comment-list">
+						{comments.map((v, i) => (
+							<CommentItem comment={v} key={i} />
+						))}
+					</ul>
+				</>
+			) : null}
+		</div>
+	);
+});

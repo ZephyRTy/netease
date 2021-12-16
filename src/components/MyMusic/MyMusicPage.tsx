@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { HashRouter, Route, Routes } from 'react-router-dom';
 import { user } from '../../utils/user';
 import { PlaylistsWrapper } from './Playlists';
 import { SongListWrapper } from './SongList';
@@ -14,7 +15,29 @@ export const MyMusicPage = (props: { user: typeof user }) => {
 	return (
 		<div className="myMusic-container">
 			<PlaylistsWrapper user={user} />
-			<SongListWrapper />
+			<HashRouter>
+				<Routes>
+					<Route
+						element={<SongListWrapper user={props.user} />}
+						path="/"
+					>
+						<Route
+							element={
+								<SongListWrapper
+									defaultList
+									user={props.user}
+								/>
+							}
+							path="playlist"
+						>
+							<Route
+								element={<SongListWrapper user={props.user} />}
+								path=":id"
+							></Route>
+						</Route>
+					</Route>
+				</Routes>
+			</HashRouter>
 		</div>
 	);
 };

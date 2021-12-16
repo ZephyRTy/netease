@@ -18,27 +18,25 @@ const PlaylistCover = (props: { ImgUrl: string }) => {
 	);
 };
 
-export const PlaylistInfo = observer(
-	(props: { active: { activePlaylist: PlayList } }) => {
-		const [url, setUrl] = useState('');
-		useEffect(() => {
-			setUrl('');
-			props.active.activePlaylist?.getCover(setUrl);
-		}, [props.active.activePlaylist]);
-		return (
-			<div className="playlist-info">
-				<div className="playlist-info-wrapper">
-					<PlaylistCover ImgUrl={url} />
-					<div className="playlist-info-intro">
-						<span className="playlist-info-name">
-							{props.active.activePlaylist?.name}
-						</span>
-						<p className="playlist-info-description">
-							{props.active.activePlaylist?.description}
-						</p>
-					</div>
+export const PlaylistInfo = observer((props: { active: PlayList }) => {
+	const [url, setUrl] = useState('');
+	useEffect(() => {
+		setUrl('');
+		props.active?.getCover(setUrl);
+	}, [props.active]);
+	return (
+		<div className="playlist-info">
+			<div className="playlist-info-wrapper">
+				<PlaylistCover ImgUrl={url} />
+				<div className="playlist-info-intro">
+					<span className="playlist-info-name">
+						{props.active?.name}
+					</span>
+					<p className="playlist-info-description">
+						{props.active?.description}
+					</p>
 				</div>
 			</div>
-		);
-	}
-);
+		</div>
+	);
+});

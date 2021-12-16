@@ -1,6 +1,5 @@
 import { observer } from 'mobx-react-lite';
 import React, { useState } from 'react';
-import { active } from '../../utils/global';
 import { PlayList } from '../../utils/playList';
 import { user } from '../../utils/user';
 import './style/playlist.scss';
@@ -20,11 +19,7 @@ const PlaylistItem = (props: { playlist: PlayList }) => {
 					<span className="playlist-item-info-name">
 						<a
 							className="playlist-item-info-link"
-							href="#!"
-							onClick={(e) => {
-								e.preventDefault();
-								active.mount(props.playlist);
-							}}
+							href={`#/playlist/${props.playlist.id}`}
 						>
 							{props.playlist.name}
 						</a>

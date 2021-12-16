@@ -66,6 +66,12 @@
 					padding: {
 						right: 30px;
 					}
+					a {
+						&:link {
+							color: initial;
+							text-decoration: none;
+						}
+					}
 				}
 			}
 			&-duration {

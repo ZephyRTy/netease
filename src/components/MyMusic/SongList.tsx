@@ -1,20 +1,37 @@
 import { observer } from 'mobx-react';
-import React, { useEffect, useState } from 'react';
-import { active, cookie } from '../../utils/global';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useParams } from 'react-router';
+import { cookie } from '../../utils/global';
 import { PlayList } from '../../utils/playList';
 import { Song } from '../../utils/song';
+import { user } from '../../utils/user';
 import { CommentList } from './CommentList';
 import { Loading } from './Loading';
 import { PlaylistInfo } from './PlaylistInfo';
 import './style/songList.scss';
-
 // 歌单中歌曲列表的展示组件
 
-const SongInfoSpan = (props: { name: string; content: string }) => {
+const SongInfoSpan = (props: {
+	name: string;
+	content: string;
+	song?: Song;
+}) => {
 	return (
 		<td className={props.name}>
 			<span className={`${props.name}-span`} title={props.content}>
-				{props.content}
+				{props.song ? (
+					<a
+						href="#!"
+						onClick={(e) => {
+							e.preventDefault();
+							//props.song?.getLyric();
+						}}
+					>
+						{props.content}
+					</a>
+				) : (
+					props.content
+				)}
 			</span>
 		</td>
 	);
@@ -44,6 +61,7 @@ const SongItem = (props: { track: Song; index: number }) => {
 			<SongInfoSpan
 				content={props.track.name}
 				name="song-detail-list-item-name"
+				song={props.track}
 			/>
 			<SongInfoSpan
 				content={props.track.duration}
@@ -61,22 +79,23 @@ const SongItem = (props: { track: Song; index: number }) => {
 	);
 };
 
-const SongList = observer((props: { active: { activePlaylist: PlayList } }) => {
+const SongList = observer((props: { active: PlayList }) => {
 	const [songList, setSongList] = useState([] as Song[]);
 	useEffect(() => {
 		setSongList([]);
-		props.active.activePlaylist?.getTracks(cookie.get(), setSongList);
-	}, [props.active.activePlaylist]);
-	return (
-		<tbody className="song-detail-list">
-			{songList.length ? (
-				songList.map((v, i) => (
+		props.active?.getSongs(cookie.get(), setSongList);
+	}, [props.active, props.active?.trackIds.length]);
+	return songList.length ? (
+		<table className="song-detail-table">
+			<SongListTitle />
+			<tbody className="song-detail-list">
+				{songList.map((v, i) => (
 					<SongItem index={i + 1} key={v.id} track={v} />
-				))
-			) : (
-				<Loading />
-			)}
-		</tbody>
+				))}
+			</tbody>
+		</table>
+	) : (
+		<Loading />
 	);
 });
 
@@ -102,15 +121,20 @@ const SongListTitle = () => {
 	);
 };
 
-export const SongListWrapper = () => {
-	return (
-		<div className="song-detail-wrapper">
-			<PlaylistInfo active={active} />
-			<table className="song-detail-table">
-				<SongListTitle />
-				<SongList active={active} />
-			</table>
-			<CommentList active={active} />
-		</div>
-	);
-};
+export const SongListWrapper = observer(
+	(props: { user: typeof user; defaultList?: boolean }) => {
+		const { id } = useParams();
+		const playlist = useMemo(() => {
+			return props.defaultList
+				? props.user.createdPlaylists[0]
+				: props.user.find(id);
+		}, [id, props.user.createdPlaylists.length]);
+		return (
+			<div className="song-detail-wrapper">
+				<PlaylistInfo active={playlist!} />
+				<SongList active={playlist!} />
+				<CommentList active={playlist!} />
+			</div>
+		);
+	}
+);
