@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react-lite';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { PlayList } from '../../utils/playList';
 import { user } from '../../utils/user';
 import './style/playlist.scss';
@@ -33,8 +33,12 @@ const PlaylistItem = (props: { playlist: PlayList }) => {
 	);
 };
 
-const Playlist = (props: { playlists: PlayList[]; title: string }) => {
+const Playlist = observer((props: { playlists: PlayList[]; title: string }) => {
 	const [open, setOpen] = useState(true);
+	const [flag, setFlag] = useState(false);
+	useEffect(() => {
+		setFlag(!flag);
+	}, [props.playlists.length]);
 	return (
 		<div>
 			<div
@@ -50,15 +54,21 @@ const Playlist = (props: { playlists: PlayList[]; title: string }) => {
 				</span>
 			</div>
 			<ul className={'playlist' + (open ? ' playlist-open' : '')}>
-				{props.playlists.map((v) => (
-					<PlaylistItem key={v.id} playlist={v} />
+				{props.playlists.map((v, i) => (
+					<PlaylistItem key={i} playlist={v} />
 				))}
 			</ul>
 		</div>
 	);
-};
+});
 
 export const PlaylistsWrapper = observer((props: { user: typeof user }) => {
+	useEffect(() => {
+		if (props.user._LogStatus) {
+			props.user.getAllPlaylists();
+		}
+		return () => {};
+	}, [props.user._LogStatus]);
 	return (
 		<div className="playlist-container">
 			{props.user._infoLoaded ? (

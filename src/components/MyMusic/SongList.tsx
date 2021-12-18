@@ -21,9 +21,11 @@ const SongInfoSpan = (props: {
 			<span className={`${props.name}-span`} title={props.content}>
 				{props.song ? (
 					<a
-						href="#!"
+						href={!props.song ? '#!' : `#/track/${props.song.id}`}
 						onClick={(e) => {
-							e.preventDefault();
+							if (!props.song) {
+								e.preventDefault();
+							}
 							//props.song?.getLyric();
 						}}
 					>
@@ -37,7 +39,7 @@ const SongInfoSpan = (props: {
 	);
 };
 
-const SongItem = (props: { track: Song; index: number }) => {
+const SongItem = (props: { song: Song; index: number }) => {
 	return (
 		<tr
 			className={`song-detail-list-item ${
@@ -52,27 +54,27 @@ const SongItem = (props: { track: Song; index: number }) => {
 					<i
 						className="uil uil-play-circle play-icon"
 						onClick={() => {
-							props.track.getUrl();
+							props.song.getUrl();
 						}}
 					></i>
 				</div>
 			</td>
 
 			<SongInfoSpan
-				content={props.track.name}
+				content={props.song.name}
 				name="song-detail-list-item-name"
-				song={props.track}
+				song={props.song}
 			/>
 			<SongInfoSpan
-				content={props.track.duration}
+				content={props.song.duration}
 				name="song-detail-list-item-duration"
 			/>
 			<SongInfoSpan
-				content={props.track.artists}
+				content={props.song.artists}
 				name="song-detail-list-item-artists"
 			/>
 			<SongInfoSpan
-				content={props.track.album.name}
+				content={props.song.album.name}
 				name="song-detail-list-item-album"
 			/>
 		</tr>
@@ -90,7 +92,7 @@ const SongList = observer((props: { active: PlayList }) => {
 			<SongListTitle />
 			<tbody className="song-detail-list">
 				{songList.map((v, i) => (
-					<SongItem index={i + 1} key={v.id} track={v} />
+					<SongItem index={i + 1} key={v.id} song={v} />
 				))}
 			</tbody>
 		</table>
@@ -120,7 +122,7 @@ const SongListTitle = () => {
 		</thead>
 	);
 };
-
+//TODO 可访问用户未收藏的歌单
 export const SongListWrapper = observer(
 	(props: { user: typeof user; defaultList?: boolean }) => {
 		const { id } = useParams();
