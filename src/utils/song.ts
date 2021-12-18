@@ -1,23 +1,21 @@
 import axios from 'axios';
-import { cookie, realIP, serverPath } from './global';
-
-interface IAlbum {
+import React from 'react';
+import { cookie, realIP, serverPath } from '../utils/global';
+export interface IAlbum {
 	id: string;
 	name: string;
-	pic: string;
 	picUrl: string;
 }
-interface IArtist {
+export interface IArtist {
 	id: string;
 	name: string;
 }
 export class Song {
-	private _name: string = '';
-	private _id: string = '';
-	album: IAlbum = { id: '', name: '', pic: '', picUrl: '' };
-	private _artists: IArtist[] = [];
-	private _duration = 0; //歌曲时长，保存为毫秒，表示格式为""
-	private _url = '';
+	protected _name: string = '';
+	protected _id: string = '';
+	album: IAlbum;
+	protected _artists: IArtist[] = [];
+	protected _duration = 0; //歌曲时长，保存为毫秒，表示格式为""
 	constructor(
 		name: string,
 		id: string,
@@ -25,8 +23,8 @@ export class Song {
 		artists: IArtist[],
 		duration: number
 	) {
-		this._id = id;
 		this._name = name;
+		this._id = id;
 		this.album = albumInfo;
 		this._artists = artists;
 		this._duration = duration;
@@ -46,7 +44,8 @@ export class Song {
 		return (
 			`${minutes.toString().padStart(2, '0')}:${seconds
 				.toString()
-				.padStart(2, '0')}` + (showMillisecond ? `.${mm}` : '')
+				.padStart(2, '0')}` +
+			(showMillisecond ? `.${Math.floor(mm / 10)}` : '')
 		);
 	}
 
@@ -63,6 +62,16 @@ export class Song {
 			.then(console.log)
 			.catch(console.log);
 	}
+
+	getCover(setState: React.Dispatch<React.SetStateAction<any>>) {
+		const img = new Image();
+		img.src = this.album.picUrl;
+		img.onload = () => {
+			img.onload = null;
+			setState(img.src);
+		};
+	}
+
 	get id() {
 		return this._id;
 	}
