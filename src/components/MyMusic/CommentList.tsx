@@ -1,7 +1,6 @@
 import { observer } from 'mobx-react';
 import React, { useEffect, useState } from 'react';
-import { Comment } from '../../utils/comment';
-import { PlayList } from '../../utils/playList';
+import { Comment, HaveComment } from '../../utils/comment';
 import './style/commentList.scss';
 
 // 歌单评论
@@ -33,6 +32,9 @@ const CommentItem = (props: { comment: Comment }) => {
 						</span>
 						{props.comment.content}
 					</p>
+					<p className="comment-list-item-time">
+						{props.comment.timeStr}
+					</p>
 				</div>
 			</div>
 		</li>
@@ -45,7 +47,7 @@ const CommentListTitle = () => {
 		</div>
 	);
 };
-export const CommentList = observer((props: { active: PlayList }) => {
+export const CommentList = observer((props: { active: HaveComment }) => {
 	const [comments, setComments] = useState([] as Comment[]);
 	useEffect(() => {
 		setComments([]);
