@@ -1,0 +1,35 @@
+.sim-playlist {
+	&-item {
+		display: flex;
+		margin: 20px 10px;
+		&-cover {
+			width: auto;
+			img {
+				width: 40px;
+			}
+		}
+		&-info {
+			margin-left: 10px;
+			font-size: 10px;
+			width: 160px;
+			height: 100%;
+			display: flex;
+			flex-direction: column;
+			&-name {
+				display: inline-block;
+				width: 100%;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+				margin-bottom: 10px;
+			}
+
+			&-creator {
+				display: inline-block;
+				&-name {
+					color: rgb(141, 141, 141);
+				}
+			}
+		}
+	}
+}
