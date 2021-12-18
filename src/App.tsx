@@ -1,9 +1,9 @@
 import React from 'react';
 import './App.scss';
-import { MainContent } from './components/MainContent/MainContent';
+import { Router } from './components/Router';
+import { user } from './utils/user';
 
 function App() {
-	return <MainContent />;
+	return <Router user={user} />;
 }
-
 export default App;
