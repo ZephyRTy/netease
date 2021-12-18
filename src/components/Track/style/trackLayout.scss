@@ -1,0 +1,10 @@
+@import '../../../style/global.scss';
+
+.track-layout {
+	display: flex;
+	width: 100%;
+	border: {
+		left: $border-theme;
+		right: $border-theme;
+	}
+}
