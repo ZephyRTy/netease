@@ -12,7 +12,7 @@ interface ISubInfo {
  * User类，存放用户信息的数据结构
  * 全局单例模式
  */
-class User {
+export class User {
 	private _uid: string = ''; //用户的id
 	private _subInfo: ISubInfo = {
 		subPlaylistCount: 0,
@@ -46,6 +46,10 @@ class User {
 	 * @param password 用户的密码
 	 */
 	async LogIn(phone: string, password: string, mode: string = 'cellphone') {
+		console.log('log in');
+		if (this._LogStatus) {
+			throw '重复登录';
+		}
 		this.createdPlaylists.length = 0;
 		this.subPlaylists.length = 0;
 		await axios
@@ -67,12 +71,6 @@ class User {
 				this.nickName = this.profile.nickName;
 			})
 			.catch((err) => console.log(err));
-		await axios
-			.get(
-				`${serverPath}/user/subcount?realIP=${realIP}&cookie=${cookie.get()}`
-			)
-			.then((res) => (this._subInfo = res.data));
-		this.getAllPlaylists();
 	}
 
 	/**
@@ -91,7 +89,13 @@ class User {
 	/**
 	 * 获取用户的所有歌单信息
 	 */
-	private async getAllPlaylists() {
+	async getAllPlaylists() {
+		this._infoLoaded = false;
+		await axios
+			.get(
+				`${serverPath}/user/subcount?realIP=${realIP}&cookie=${cookie.get()}`
+			)
+			.then((res) => (this._subInfo = res.data));
 		await axios
 			.get(
 				`${serverPath}/user/playlist?uid=${this._uid}&realIP=${realIP}`
@@ -116,16 +120,6 @@ class User {
 	}
 
 	/**
-	 * 添加歌单
-	 * @param playListId 要添加的歌单id
-	 * @param mode 添加到哪个歌单列表中
-	 */
-	add(playListId: string, mode: 'created' | 'sub' = 'created') {
-		const sym = mode === 'created' ? 'createdPlaylists' : 'subPlaylists';
-		this[sym].push(new PlayList(playListId, cookie.get()));
-	}
-
-	/**
 	 * 从歌单列表中删除歌单
 	 * @param playListId 要删除的歌单id
 	 * @param mode 从哪个歌单列表中删除
@@ -142,7 +136,8 @@ class User {
 	 * @returns id对应的歌单
 	 */
 	find(playlistId: string | undefined) {
-		if (!playlistId) return this.createdPlaylists[0];
+		if (!playlistId || playlistId.length === 0)
+			return this.createdPlaylists[0];
 		return (
 			this.createdPlaylists.find((e) => e.id === playlistId) ||
 			this.subPlaylists.find((e) => e.id === playlistId)

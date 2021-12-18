@@ -1,0 +1,15 @@
+.sim-song {
+	&-wrapper {
+		margin-top: 40px;
+	}
+	&-item {
+		margin: 25px 10px;
+		&-name {
+			font-size: 15px;
+		}
+		&-artists {
+			font-size: 10px;
+			color: rgb(179, 179, 179);
+		}
+	}
+}

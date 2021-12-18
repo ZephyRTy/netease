@@ -1,11 +1,19 @@
-import React from 'react';
-import { user } from '../../utils/user';
-import { MyMusicPage } from '../MyMusic/MyMusicPage';
+import React, { useEffect } from 'react';
+import { Outlet } from 'react-router-dom';
+import { User } from '../../utils/user';
 import './main-content.scss';
-export const MainContent = () => {
+
+export const MainContentLayout = (props: { user: User }) => {
+	useEffect(() => {
+		props.user.LogIn('15527657001', 'yty7895123');
+		return () => {
+			console.log('log out');
+			props.user.LogOut();
+		};
+	}, []);
 	return (
 		<div className="main-content">
-			<MyMusicPage user={user} />
+			<Outlet />
 		</div>
 	);
 };

@@ -1,5 +1,13 @@
 import axios from 'axios';
+import React from 'react';
 import { cookie, realIP, serverPath } from './global';
+
+export interface HaveComment {
+	comments: CommentUtil;
+	// eslint-disable-next-line no-unused-vars
+	getComments(setState: React.Dispatch<React.SetStateAction<any>>): void;
+}
+
 /**
  * 单条评论
  */
@@ -36,6 +44,10 @@ export class Comment {
 		return this._content;
 	}
 
+	get timeStr() {
+		return this._timeStamp;
+	}
+
 	get avatar() {
 		return this._avatar;
 	}
@@ -44,7 +56,7 @@ export class Comment {
 /**
  * 所有评论
  */
-export class CommentList {
+export class CommentUtil {
 	private _comments: Comment[] = [];
 
 	/**
@@ -75,12 +87,11 @@ export class CommentList {
 						)
 				);
 				setState(this._comments);
-				//active.commentStatus = true;
 			})
 			.catch(console.log);
 	}
 	// 遍历评论列表
-	traverse() {
+	get traverse() {
 		return [...this._comments];
 	}
 }

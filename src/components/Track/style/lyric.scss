@@ -1,0 +1,29 @@
+.lyric {
+	margin-top: 30px;
+	max-height: 300px;
+	width: 100%;
+	overflow-y: auto;
+	text-align: center;
+	color: gray;
+	&::-webkit-scrollbar {
+		max-width: 8px;
+		background-color: transparent;
+	}
+	&:hover::-webkit-scrollbar {
+		max-width: 8px;
+		background-color: rgb(231, 231, 231);
+		border-radius: 4px;
+	}
+
+	&:hover::-webkit-scrollbar-thumb {
+		background-color: rgb(149, 149, 149);
+		border-radius: 4px;
+	}
+	&-content {
+		padding: 0 20px;
+		p {
+			margin: 0;
+			margin-bottom: 16px;
+		}
+	}
+}

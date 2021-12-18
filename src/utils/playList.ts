@@ -1,14 +1,16 @@
 import axios from 'axios';
 import { makeObservable, observable, runInAction } from 'mobx';
-import { CommentList } from './comment';
-import { realIP, serverPath } from './global';
+import React from 'react';
+import { realIP, serverPath } from '../utils/global';
+import { CommentUtil, HaveComment } from './comment';
 import { Song } from './song';
-export class PlayList {
+export class PlayList implements HaveComment {
 	private _id: string = ''; // 歌单的id
 	private _name: string = ''; // 歌单名称
 	private _count = 0; // 歌单中歌曲的数量
 	private _description = '';
-	commentList = new CommentList();
+	private _creator = '';
+	comments = new CommentUtil();
 	private _coverImgUrl: string = ''; // 歌单封面
 
 	//! 歌曲数组为可观察对象，因此不能改变列表的引用
@@ -19,12 +21,22 @@ export class PlayList {
 	 * @param id 歌单的id
 	 * @param cookie 用户的cookie，在PlayList中仅用与请求歌单信息，不做保存
 	 */
-	constructor(listInfo: any, cookie: string) {
+	constructor(
+		listInfo: {
+			id: string;
+			name: string;
+			coverImgUrl: string;
+			trackCount: number;
+			creator: { nickname: string };
+		},
+		cookie: string
+	) {
 		makeObservable(this, { trackIds: observable });
 		this._id = listInfo.id.toString();
 		this._name = listInfo.name;
 		this._coverImgUrl = listInfo.coverImgUrl;
 		this._count = listInfo.trackCount;
+		this._creator = listInfo.creator.nickname;
 		try {
 			this.getDetail(cookie);
 		} catch (err) {
@@ -58,7 +70,7 @@ export class PlayList {
 	 * @param setState  React组件中的setState函数
 	 */
 	getComments(setState: any) {
-		this.commentList.getComments(setState, this.id, 'playlist');
+		this.comments.getComments(setState, this.id, 'playlist');
 	}
 
 	/**
@@ -66,7 +78,10 @@ export class PlayList {
 	 * @param cookie
 	 * @param setState React组件中的setState函数
 	 */
-	getSongs(cookie: string, setState: any) {
+	getSongs(
+		cookie: string,
+		setState: React.Dispatch<React.SetStateAction<any>>
+	) {
 		if (this.trackIds.length === 0) return;
 		axios
 			.get(
@@ -75,8 +90,6 @@ export class PlayList {
 				)}&realIP=${realIP}&cookie=${cookie}`
 			)
 			.then((res) => {
-				console.log(res.data.songs[0]);
-
 				setState(
 					res.data.songs.map(
 						(v: any) =>
@@ -142,5 +155,9 @@ export class PlayList {
 
 	get cover() {
 		return this._coverImgUrl;
+	}
+
+	get creator() {
+		return this._creator;
 	}
 }
