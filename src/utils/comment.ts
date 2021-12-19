@@ -1,12 +1,5 @@
 import axios from 'axios';
-import React from 'react';
 import { cookie, realIP, serverPath } from './global';
-
-export interface HaveComment {
-	comments: CommentUtil;
-	// eslint-disable-next-line no-unused-vars
-	getComments(setState: React.Dispatch<React.SetStateAction<any>>): void;
-}
 
 /**
  * 单条评论
@@ -66,13 +59,12 @@ export class CommentUtil {
 	 * @param mode 选择获取歌单还是歌曲的评论
 	 * @param cookieValue cookie
 	 */
-	getComments(
-		setState: any,
+	async getComments(
 		id: string,
 		mode: 'music' | 'playlist',
 		cookieValue = cookie.get()
 	) {
-		axios
+		return axios
 			.get(
 				`${serverPath}/comment/${mode}?id=${id}&realIP=${realIP}&cookie=${cookieValue}`
 			)
@@ -86,9 +78,9 @@ export class CommentUtil {
 							v.user.avatarUrl
 						)
 				);
-				setState(this._comments);
+				return this._comments;
 			})
-			.catch(console.log);
+			.catch(console.error);
 	}
 	// 遍历评论列表
 	get traverse() {

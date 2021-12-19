@@ -36,7 +36,8 @@ export class User {
 			_LogStatus: observable,
 			_infoLoaded: observable,
 			LogIn: action,
-			LogOut: action
+			LogOut: action,
+			getAllPlaylists: action
 		});
 	}
 
@@ -66,7 +67,9 @@ export class User {
 				}
 				cookie.set(res.data.cookie);
 				this._uid = res.data.account.id;
-				this._LogStatus = true;
+				runInAction(() => {
+					this._LogStatus = true;
+				});
 				this.profile = res.data.profile;
 				this.nickName = this.profile.nickName;
 			})
@@ -106,13 +109,19 @@ export class User {
 						...res.data.playlist
 							.slice(0, this.createdPlaylistCount)
 							.map((v: any) => {
-								return new PlayList(v, cookie.get());
+								const a = new PlayList(v);
+								//a.getDetail(cookie.get());
+								return a;
 							})
 					);
 					this.subPlaylists.push(
 						...res.data.playlist
 							.slice(this.createdPlaylistCount)
-							.map((v: any) => new PlayList(v, cookie.get()))
+							.map((v: any) => {
+								const a = new PlayList(v);
+								//a.getDetail(cookie.get());
+								return a;
+							})
 					);
 					this._infoLoaded = true;
 				});
@@ -136,12 +145,16 @@ export class User {
 	 * @returns id对应的歌单
 	 */
 	find(playlistId: string | undefined) {
+		let c = cookie.get();
 		if (!playlistId || playlistId.length === 0)
-			return this.createdPlaylists[0];
-		return (
-			this.createdPlaylists.find((e) => e.id === playlistId) ||
-			this.subPlaylists.find((e) => e.id === playlistId)
-		);
+			return this.createdPlaylists[0].getDetail(c);
+		else {
+			return (
+				this.createdPlaylists.find((e) => e.id === playlistId) ||
+				this.subPlaylists.find((e) => e.id === playlistId) ||
+				new PlayList({ id: playlistId })
+			).getDetail(c);
+		}
 	}
 	/**
 	 * 用户uid的访问器
