@@ -6,18 +6,13 @@ import { Track } from './track';
 
 export class SimUtil {
 	private constructor() {}
-	static getSim(obj: Track, mode: 'song' | 'playlist', setState: any) {
-		axios
-			.get(
-				`${serverPath}/simi/${mode}?id=${
-					obj.id
-				}&realIP=${realIP}&cookie=${cookie.get()}`
-			)
-			.then((res) => {
-				console.log(mode + ': ');
-				console.log(res);
-				setState(SimUtil.utils[mode as string](res.data[`${mode}s`]));
-			});
+	static async getSim(obj: Track, mode: 'song' | 'playlist') {
+		const res = await axios.get(
+			`${serverPath}/simi/${mode}?id=${
+				obj.id
+			}&realIP=${realIP}&cookie=${cookie.get()}`
+		);
+		return SimUtil.utils[mode as string](res.data[`${mode}s`]);
 	}
 	private static utils: { [song: string]: Function; playlist: Function } = {
 		song: (
@@ -49,7 +44,7 @@ export class SimUtil {
 				creator: { nickname: string };
 			}[]
 		) {
-			return info.map((v) => new PlayList(v, cookie.get()));
+			return info.map((v) => new PlayList(v));
 		}
 	};
 
