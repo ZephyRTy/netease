@@ -1,7 +1,10 @@
 .lyric {
+	position: relative;
+	right: 40px;
 	margin-top: 30px;
 	max-height: 300px;
 	width: 100%;
+	padding: 10px auto;
 	overflow-y: auto;
 	text-align: center;
 	color: gray;
@@ -26,4 +29,8 @@
 			margin-bottom: 16px;
 		}
 	}
+}
+
+.focus {
+	color: red;
 }
