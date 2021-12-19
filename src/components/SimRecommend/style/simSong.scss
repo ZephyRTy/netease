@@ -6,6 +6,13 @@
 		margin: 25px 10px;
 		&-name {
 			font-size: 15px;
+			a {
+				&:link,
+				&:visited {
+					color: initial;
+					text-decoration: none;
+				}
+			}
 		}
 		&-artists {
 			font-size: 10px;

@@ -22,6 +22,13 @@
 				text-overflow: ellipsis;
 				white-space: nowrap;
 				margin-bottom: 10px;
+				a {
+					&:link,
+					&:visited {
+						color: initial;
+						text-decoration: none;
+					}
+				}
 			}
 
 			&-creator {

@@ -1,6 +1,8 @@
 import { observer } from 'mobx-react';
 import React, { useEffect, useState } from 'react';
-import { Comment, HaveComment } from '../../utils/comment';
+import { Comment } from '../../utils/comment';
+import { useAsync } from '../../utils/hooks/useAsync';
+import { HaveComment } from '../../utils/interface';
 import './style/commentList.scss';
 
 // 歌单评论
@@ -49,10 +51,24 @@ const CommentListTitle = () => {
 };
 export const CommentList = observer((props: { active: HaveComment }) => {
 	const [comments, setComments] = useState([] as Comment[]);
-	useEffect(() => {
-		setComments([]);
-		props.active?.getComments(setComments);
-	}, [props.active]);
+	// useEffect(() => {
+	// 	let flag = true;
+	// 	setComments([]);
+	// 	props.active?.getComments().then((res) => {
+	// 		if (flag) setComments(res!);
+	// 	});
+	// 	return () => {
+	// 		flag = false;
+	// 	};
+	// }, [props.active]);
+	useAsync(
+		() => {
+			return props.active?.getComments();
+		},
+		setComments,
+		[props.active],
+		[]
+	);
 	return (
 		<div className="comment-wrapper">
 			<CommentListTitle />

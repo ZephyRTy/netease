@@ -64,7 +64,7 @@ const Playlist = observer((props: { playlists: PlayList[]; title: string }) => {
 
 export const PlaylistsWrapper = observer((props: { user: typeof user }) => {
 	useEffect(() => {
-		if (props.user._LogStatus) {
+		if (props.user._LogStatus && !props.user.createdPlaylistCount) {
 			props.user.getAllPlaylists();
 		}
 		return () => {};

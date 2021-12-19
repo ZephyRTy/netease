@@ -1,10 +1,10 @@
 import axios from 'axios';
 import { makeObservable, observable, runInAction } from 'mobx';
-import React from 'react';
 import { realIP, serverPath } from '../utils/global';
-import { CommentUtil, HaveComment } from './comment';
+import { CommentUtil } from './comment';
+import { HaveComment, SongSet } from './interface';
 import { Song } from './song';
-export class PlayList implements HaveComment {
+export class PlayList implements HaveComment, SongSet {
 	private _id: string = ''; // 歌单的id
 	private _name: string = ''; // 歌单名称
 	private _count = 0; // 歌单中歌曲的数量
@@ -21,47 +21,53 @@ export class PlayList implements HaveComment {
 	 * @param id 歌单的id
 	 * @param cookie 用户的cookie，在PlayList中仅用与请求歌单信息，不做保存
 	 */
-	constructor(
-		listInfo: {
-			id: string;
-			name: string;
-			coverImgUrl: string;
-			trackCount: number;
-			creator: { nickname: string };
-		},
-		cookie: string
-	) {
+	constructor(listInfo: {
+		id: string;
+		name?: string;
+		coverImgUrl?: string;
+		trackCount?: number;
+		creator?: { nickname: string };
+	}) {
 		makeObservable(this, { trackIds: observable });
 		this._id = listInfo.id.toString();
-		this._name = listInfo.name;
-		this._coverImgUrl = listInfo.coverImgUrl;
-		this._count = listInfo.trackCount;
-		this._creator = listInfo.creator.nickname;
-		try {
-			this.getDetail(cookie);
-		} catch (err) {
-			console.log(err);
-		}
+		this._name = listInfo.name ?? '';
+		this._coverImgUrl = listInfo.coverImgUrl ?? '';
+		this._count = listInfo.trackCount ?? 0;
+		this._creator = listInfo.creator?.nickname ?? '';
+	}
+
+	static getPlaylist(id: string) {
+		return axios.get(
+			`${serverPath}/user/playlist?uid=${id}&realIP=${realIP}`
+		);
 	}
 	/**
 	 * 获取歌单中所有歌曲
 	 * @param cookie 用户的cookie，只用于请求
 	 */
-	private async getDetail(cookie: string) {
+	async getDetail(cookie: string) {
 		this.trackIds.length = 0;
-		await axios
-			.get(
+		try {
+			const res = await axios.get(
 				`${serverPath}/playlist/detail?id=${this._id}&realIP=${realIP}&cookie=${cookie}`
-			)
-			.then((res) => {
-				runInAction(() => {
-					this._description = res.data.playlist.description;
-					this.trackIds.push(
-						...res.data.playlist.trackIds.map((v: any) => v.id)
-					);
-				});
-			})
-			.catch(console.log);
+			);
+			runInAction(() => {
+				const info = res.data.playlist;
+				if (this.name === '') {
+					this._name = info.name;
+					this._count = info.trackCount;
+					this._coverImgUrl = info.coverImgUrl;
+					this._creator = info.creator.nickname;
+				}
+				this._description = res.data.playlist.description;
+				this.trackIds.push(
+					...res.data.playlist.trackIds.map((v: any) => v.id)
+				);
+			});
+			return await Promise.resolve(this);
+		} catch (message) {
+			return console.log(message);
+		}
 	}
 
 	/**
@@ -69,8 +75,8 @@ export class PlayList implements HaveComment {
 	 * @param cookie
 	 * @param setState  React组件中的setState函数
 	 */
-	getComments(setState: any) {
-		this.comments.getComments(setState, this.id, 'playlist');
+	async getComments() {
+		return this.comments.getComments(this.id, 'playlist');
 	}
 
 	/**
@@ -78,34 +84,29 @@ export class PlayList implements HaveComment {
 	 * @param cookie
 	 * @param setState React组件中的setState函数
 	 */
-	getSongs(
-		cookie: string,
-		setState: React.Dispatch<React.SetStateAction<any>>
-	) {
-		if (this.trackIds.length === 0) return;
-		axios
-			.get(
+	async getSongs(cookie: string) {
+		if (this.trackIds.length === 0) return Promise.resolve([] as Song[]);
+		try {
+			const res = await axios.get(
 				`${serverPath}/song/detail?ids=${this.trackIds.join(
 					','
 				)}&realIP=${realIP}&cookie=${cookie}`
-			)
-			.then((res) => {
-				setState(
-					res.data.songs.map(
-						(v: any) =>
-							new Song(
-								v.name,
-								v.id,
-								v.al,
-								v.ar.map((v: any) => {
-									return { id: v.id, name: v.name };
-								}),
-								v.dt
-							)
+			);
+			return res.data.songs.map(
+				(v: any) =>
+					new Song(
+						v.name,
+						v.id,
+						v.al,
+						v.ar.map((v: any) => {
+							return { id: v.id, name: v.name };
+						}),
+						v.dt
 					)
-				);
-			})
-			.catch(console.log);
+			) as Song[];
+		} catch (message) {
+			return console.log(message);
+		}
 	}
 
 	/**

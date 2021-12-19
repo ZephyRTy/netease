@@ -1,7 +1,8 @@
 import { observer } from 'mobx-react';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { cookie } from '../../utils/global';
+import { useAsync } from '../../utils/hooks/useAsync';
 import { PlayList } from '../../utils/playList';
 import { Song } from '../../utils/song';
 import { user } from '../../utils/user';
@@ -83,10 +84,24 @@ const SongItem = (props: { song: Song; index: number }) => {
 
 const SongList = observer((props: { active: PlayList }) => {
 	const [songList, setSongList] = useState([] as Song[]);
-	useEffect(() => {
-		setSongList([]);
-		props.active?.getSongs(cookie.get(), setSongList);
-	}, [props.active, props.active?.trackIds.length]);
+	// useEffect(() => {
+	// 	let flag = true;
+	// 	setSongList([]);
+	// 	props.active?.getSongs(cookie.get()).then((res) => {
+	// 		if (flag) setSongList(res!);
+	// 	});
+	// 	return () => {
+	// 		flag = false;
+	// 	};
+	// }, [props.active, props.active?.trackIds.length]);
+	useAsync(
+		() => {
+			return props.active?.getSongs(cookie.get());
+		},
+		setSongList,
+		[props.active, props.active?.trackIds.length],
+		[]
+	);
 	return songList.length ? (
 		<table className="song-detail-table">
 			<SongListTitle />
@@ -126,11 +141,16 @@ const SongListTitle = () => {
 export const SongListWrapper = observer(
 	(props: { user: typeof user; defaultList?: boolean }) => {
 		const { id } = useParams();
-		const playlist = useMemo(() => {
-			return props.defaultList
-				? props.user.createdPlaylists[0]
-				: props.user.find(id);
-		}, [id, props.user.createdPlaylists.length]);
+		const [playlist, setPlaylist] = useState(null as unknown as PlayList);
+		useEffect(() => {
+			if (!props.user._infoLoaded) return;
+			setPlaylist(null as unknown as PlayList);
+			props.user.find(id)?.then((res) => {
+				setPlaylist(
+					props.defaultList ? props.user.createdPlaylists[0] : res!
+				);
+			});
+		}, [id, props.user._infoLoaded]);
 		return (
 			<div className="song-detail-wrapper">
 				<PlaylistInfo active={playlist!} />
