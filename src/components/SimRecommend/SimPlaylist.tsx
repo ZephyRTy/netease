@@ -14,7 +14,9 @@ const SimPlaylistItem = (props: { playlist: PlayList }) => {
 			</div>
 			<div className="sim-playlist-item-info">
 				<span className="sim-playlist-item-info-name">
-					{props.playlist.name}
+					<a href={`#/playlist/${props.playlist.id}`}>
+						{props.playlist.name}
+					</a>
 				</span>
 				<span className="sim-playlist-item-info-creator">
 					<span style={{ color: 'gray' }}>{'By   '}</span>

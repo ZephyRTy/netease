@@ -10,10 +10,16 @@ export const SimWrapper = (props: { track: Track }) => {
 	const [simSong, setSimSong] = useState([] as Song[]);
 	const [simPlaylist, setSimPlaylist] = useState([] as PlayList[]);
 	useEffect(() => {
+		let flag = true;
 		if (props.track) {
-			SimUtil.getSim(props.track, 'song', setSimSong);
-			SimUtil.getSim(props.track, 'playlist', setSimPlaylist);
+			SimUtil.getSim(props.track, 'song').then((res) => setSimSong(res));
+			SimUtil.getSim(props.track, 'playlist').then((res) => {
+				if (flag) setSimPlaylist(res);
+			});
 		}
+		return () => {
+			flag = false;
+		};
 	}, [props.track]);
 	return (
 		<div className="sim-wrapper">
