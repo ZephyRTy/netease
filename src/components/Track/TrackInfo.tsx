@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Lyric } from '../../utils/lyric';
-import { Track } from '../../utils/track';
+import { Lyric } from '../../utils/obj/lyric';
+import { Track } from '../../utils/obj/track';
 import { LyricList } from './Lyric';
 
 const TrackInfoSpan = (props: {
@@ -48,7 +48,9 @@ export const TrackInfo = (props: { track: Track }) => {
 		let flag = true;
 		if (props.track) {
 			props.track?.getLyric().then((res) => {
-				if (flag) setLyrics(res);
+				if (flag) {
+					setLyrics(res);
+				}
 			});
 			props.track?.getCover(setCover);
 		}

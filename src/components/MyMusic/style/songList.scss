@@ -68,15 +68,16 @@
 					padding: {
 						right: 30px;
 					}
-					a {
-						&:link {
-							color: initial;
-							text-decoration: none;
-						}
-						&:visited {
-							color: initial;
-						}
-					}
+				}
+			}
+
+			a {
+				&:link {
+					color: initial;
+					text-decoration: none;
+				}
+				&:visited {
+					color: initial;
 				}
 			}
 			&-duration {

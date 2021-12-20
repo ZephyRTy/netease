@@ -1,5 +1,7 @@
-import React from 'react';
-import { Song } from '../../utils/song';
+import React, { useState } from 'react';
+import { useDataFetch } from '../../utils/hooks/useAsync';
+import { Song } from '../../utils/obj/song';
+import { SimUtil } from '../../utils/sim';
 import { SimTitle } from './SimTitle';
 import './style/simSong.scss';
 const SimSongItem = (props: { song: Song }) => {
@@ -13,13 +15,22 @@ const SimSongItem = (props: { song: Song }) => {
 	);
 };
 
-export const SimSong = (props: { song: Song[] }) => {
-	return (
+export const SimSong = (props: { id: string }) => {
+	const [songs, setSongs] = useState([] as Song[]);
+	useDataFetch(
+		() => {
+			return SimUtil.getSim(props.id, 'song');
+		},
+		setSongs,
+		[props.id],
+		[] as Song[]
+	);
+	return songs?.length ? (
 		<div className="sim-song-wrapper">
 			<SimTitle title="相似的歌曲" />
-			{props.song.map((v, i) => (
+			{songs?.map((v, i) => (
 				<SimSongItem key={i} song={v} />
 			))}
 		</div>
-	);
+	) : null;
 };

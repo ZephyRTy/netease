@@ -1,4 +1,4 @@
-import { LyricItem } from './lyric';
+import { LyricItem } from './obj/lyric';
 
 export class Timer {
 	private interval = 0;
@@ -22,7 +22,9 @@ export class Timer {
 		}
 		this.id = setInterval(() => {
 			this.interval++;
-			if (this.current >= this.lyrics.length || !this.id) return;
+			if (this.current >= this.lyrics.length || !this.id) {
+				return;
+			}
 			console.log(
 				'int:' +
 					this.interval +

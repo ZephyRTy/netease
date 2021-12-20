@@ -1,8 +1,10 @@
+/* eslint-disable no-underscore-dangle */
 import { observer } from 'mobx-react-lite';
 import React, { useEffect, useState } from 'react';
-import { PlayList } from '../../utils/playList';
-import { user } from '../../utils/user';
-import './style/playlist.scss';
+import { useDataFetch } from '../../../utils/hooks/useAsync';
+import { PlayList } from '../../../utils/obj/playList';
+import { user } from '../../../utils/obj/user';
+import '../style/playlist.scss';
 
 // 歌单列表的展示组件
 
@@ -63,26 +65,21 @@ const Playlist = observer((props: { playlists: PlayList[]; title: string }) => {
 });
 
 export const PlaylistsWrapper = observer((props: { user: typeof user }) => {
-	useEffect(() => {
-		if (props.user._LogStatus && !props.user.createdPlaylistCount) {
-			props.user.getAllPlaylists();
-		}
-		return () => {};
-	}, [props.user._LogStatus]);
+	const [allPlaylist, setAllPlaylist] = useState([[], []] as PlayList[][]);
+	useDataFetch(
+		() => {
+			if (!props.user.LogStatus) {
+				return;
+			}
+			return props.user.getAllPlaylists();
+		},
+		setAllPlaylist,
+		[props.user.LogStatus]
+	);
 	return (
 		<div className="playlist-container">
-			{props.user._infoLoaded ? (
-				<>
-					<Playlist
-						playlists={props.user.createdPlaylists}
-						title="创建的歌单"
-					/>
-					<Playlist
-						playlists={props.user.subPlaylists}
-						title="收藏的歌单"
-					/>
-				</>
-			) : null}
+			<Playlist playlists={allPlaylist[0]} title="创建的歌单" />
+			<Playlist playlists={allPlaylist[1]} title="收藏的歌单" />
 		</div>
 	);
 });

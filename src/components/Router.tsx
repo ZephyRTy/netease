@@ -1,6 +1,6 @@
 import React from 'react';
 import { HashRouter, Route, Routes } from 'react-router-dom';
-import { User } from '../utils/user';
+import { User } from '../utils/obj/user';
 import { MainContentLayout } from './MainContent/MainContent';
 import { MyMusicLayout } from './MyMusic/MyMusicLayout';
 import { TrackLayout } from './Track/TrackLayout';

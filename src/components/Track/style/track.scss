@@ -18,7 +18,7 @@
 		img {
 			$width: 150px;
 			width: $width;
-			border-radius: $width / 2;
+			border-radius: calc($width / 2);
 		}
 	}
 	&-info {

@@ -1,16 +1,16 @@
 import axios from 'axios';
 import { cookie, realIP, serverPath } from './global';
-import { PlayList } from './playList';
-import { IAlbum, IArtist, Song } from './song';
-import { Track } from './track';
+import { PlayList } from './obj/playList';
+import { IAlbum, IArtist, Song } from './obj/song';
 
 export class SimUtil {
 	private constructor() {}
-	static async getSim(obj: Track, mode: 'song' | 'playlist') {
+	static async getSim(id: string, mode: 'song' | 'playlist') {
+		if (!id) {
+			return;
+		}
 		const res = await axios.get(
-			`${serverPath}/simi/${mode}?id=${
-				obj.id
-			}&realIP=${realIP}&cookie=${cookie.get()}`
+			`${serverPath}/simi/${mode}?id=${id}&realIP=${realIP}&cookie=${cookie.get()}`
 		);
 		return SimUtil.utils[mode as string](res.data[`${mode}s`]);
 	}
@@ -47,12 +47,4 @@ export class SimUtil {
 			return info.map((v) => new PlayList(v));
 		}
 	};
-
-	static playlist(id: string) {
-		axios
-			.get(
-				`${serverPath}/simi/playlist?id=${id}&realIP=${realIP}&cookie=${cookie.get()}`
-			)
-			.then((res) => console.log(res));
-	}
 }
