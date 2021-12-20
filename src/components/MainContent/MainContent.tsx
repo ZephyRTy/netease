@@ -1,14 +1,14 @@
 import React, { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
-import { User } from '../../utils/user';
+import { User } from '../../utils/obj/user';
 import './main-content.scss';
 
 export const MainContentLayout = (props: { user: User }) => {
 	useEffect(() => {
-		props.user.LogIn('15527657001', 'yty7895123');
+		props.user.logIn('15527657001', 'yty7895123');
 		return () => {
 			console.log('log out');
-			props.user.LogOut();
+			props.user.logOut();
 		};
 	}, []);
 	return (

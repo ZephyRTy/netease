@@ -1,7 +1,7 @@
 import axios from 'axios';
+import { cookie, realIP, serverPath } from '../global';
+import { HaveComment } from '../interface';
 import { CommentUtil } from './comment';
-import { cookie, realIP, serverPath } from './global';
-import { HaveComment } from './interface';
 import { Lyric } from './lyric';
 import { IAlbum, IArtist, Song } from './song';
 

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { action, makeObservable, observable } from 'mobx';
-import { realIP, serverPath } from './global';
-import { Timer } from './timer';
+import { realIP, serverPath } from '../global';
+import { Timer } from '../timer';
 export class LyricItem {
 	private _timeStamp = 0;
 	private _content = '';

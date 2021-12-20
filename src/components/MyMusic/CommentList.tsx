@@ -1,12 +1,11 @@
 import { observer } from 'mobx-react';
 import React, { useEffect, useState } from 'react';
-import { Comment } from '../../utils/comment';
-import { useAsync } from '../../utils/hooks/useAsync';
+import { useDataFetch } from '../../utils/hooks/useAsync';
 import { HaveComment } from '../../utils/interface';
+import { Comment } from '../../utils/obj/comment';
 import './style/commentList.scss';
 
 // 歌单评论
-//TODO 扩展为歌单和歌曲的评论
 
 const CommentItem = (props: { comment: Comment }) => {
 	const [avatar, setAvatar] = useState('');
@@ -51,17 +50,7 @@ const CommentListTitle = () => {
 };
 export const CommentList = observer((props: { active: HaveComment }) => {
 	const [comments, setComments] = useState([] as Comment[]);
-	// useEffect(() => {
-	// 	let flag = true;
-	// 	setComments([]);
-	// 	props.active?.getComments().then((res) => {
-	// 		if (flag) setComments(res!);
-	// 	});
-	// 	return () => {
-	// 		flag = false;
-	// 	};
-	// }, [props.active]);
-	useAsync(
+	useDataFetch(
 		() => {
 			return props.active?.getComments();
 		},

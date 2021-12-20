@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router';
-import { useAsync } from '../../utils/hooks/useAsync';
-import { Track } from '../../utils/track';
+import { useDataFetch } from '../../utils/hooks/useAsync';
+import { Track } from '../../utils/obj/track';
+import { SimPlaylist } from '../SimRecommend/SimPlaylist';
+import { SimSong } from '../SimRecommend/SimSong';
 import { SimWrapper } from '../SimRecommend/SimWrapper';
 import './style/trackLayout.scss';
 import { TrackWrapper } from './TrackWrapper';
@@ -19,7 +21,7 @@ export const TrackLayout = () => {
 	// 		flag = false;
 	// 	};
 	// }, [id]);
-	useAsync(
+	useDataFetch(
 		() => {
 			return Track.createTrack(id!);
 		},
@@ -30,7 +32,10 @@ export const TrackLayout = () => {
 	return (
 		<div className="track-layout">
 			<TrackWrapper track={track} />
-			<SimWrapper track={track} />
+			<SimWrapper>
+				<SimSong id={track?.id} />
+				<SimPlaylist id={track?.id} />
+			</SimWrapper>
 		</div>
 	);
 };

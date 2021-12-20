@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { cookie, realIP, serverPath } from './global';
+import { cookie, realIP, serverPath } from '../global';
 
 /**
  * 单条评论
@@ -50,8 +50,6 @@ export class Comment {
  * 所有评论
  */
 export class CommentUtil {
-	private _comments: Comment[] = [];
-
 	/**
 	 * 获取评论
 	 * @param setState 组件中的setState函数
@@ -69,7 +67,7 @@ export class CommentUtil {
 				`${serverPath}/comment/${mode}?id=${id}&realIP=${realIP}&cookie=${cookieValue}`
 			)
 			.then((res) => {
-				this._comments = res.data.comments.map(
+				return res.data.comments.map(
 					(v: any) =>
 						new Comment(
 							v.user.nickname,
@@ -78,12 +76,8 @@ export class CommentUtil {
 							v.user.avatarUrl
 						)
 				);
-				return this._comments;
 			})
 			.catch(console.error);
 	}
 	// 遍历评论列表
-	get traverse() {
-		return [...this._comments];
-	}
 }

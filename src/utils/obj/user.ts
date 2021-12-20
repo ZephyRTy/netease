@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { action, makeObservable, observable, runInAction } from 'mobx';
-import { cookie, realIP, serverPath } from './global';
+import { action, autorun, makeObservable, observable, runInAction } from 'mobx';
+import { cookie, realIP, serverPath } from '../global';
 import { PlayList } from './playList';
 
 interface ISubInfo {
@@ -18,8 +18,8 @@ export class User {
 		subPlaylistCount: 0,
 		createdPlaylistCount: 0
 	};
-	_LogStatus = false; //登录状态
-	_infoLoaded = false;
+	LogStatus = false; //登录状态
+	infoLoaded = false;
 
 	profile: any = null; //用户个人信息
 	personalInfo: any = null;
@@ -33,10 +33,10 @@ export class User {
 		makeObservable(this, {
 			subPlaylists: observable,
 			createdPlaylists: observable,
-			_LogStatus: observable,
-			_infoLoaded: observable,
-			LogIn: action,
-			LogOut: action,
+			LogStatus: observable,
+			infoLoaded: observable,
+			logIn: action,
+			logOut: action,
 			getAllPlaylists: action
 		});
 	}
@@ -46,10 +46,10 @@ export class User {
 	 * @param phone 用户的手机号
 	 * @param password 用户的密码
 	 */
-	async LogIn(phone: string, password: string, mode: string = 'cellphone') {
+	async logIn(phone: string, password: string, mode: string = 'cellphone') {
 		console.log('log in');
-		if (this._LogStatus) {
-			throw '重复登录';
+		if (this.LogStatus) {
+			throw new Error('重复登录');
 		}
 		this.createdPlaylists.length = 0;
 		this.subPlaylists.length = 0;
@@ -63,12 +63,12 @@ export class User {
 			})
 			.then((res) => {
 				if (res.data.code === 502) {
-					throw '密码错误';
+					throw new Error('密码错误');
 				}
 				cookie.set(res.data.cookie);
 				this._uid = res.data.account.id;
 				runInAction(() => {
-					this._LogStatus = true;
+					this.LogStatus = true;
 				});
 				this.profile = res.data.profile;
 				this.nickName = this.profile.nickName;
@@ -80,26 +80,26 @@ export class User {
 	 * 退出登录
 	 * @description 退出后清空信息，User对象仍保留
 	 */
-	LogOut() {
+	logOut() {
 		axios.get(`${serverPath}/logout?realIP=${realIP}`);
 		cookie.set('');
 		this._uid = '';
 		this.createdPlaylists.length = 0;
 		this.subPlaylists.length = 0;
-		this._LogStatus = false;
+		this.LogStatus = false;
 	}
 
 	/**
 	 * 获取用户的所有歌单信息
 	 */
 	async getAllPlaylists() {
-		this._infoLoaded = false;
+		this.infoLoaded = false;
 		await axios
 			.get(
 				`${serverPath}/user/subcount?realIP=${realIP}&cookie=${cookie.get()}`
 			)
 			.then((res) => (this._subInfo = res.data));
-		await axios
+		return axios
 			.get(
 				`${serverPath}/user/playlist?uid=${this._uid}&realIP=${realIP}`
 			)
@@ -109,22 +109,22 @@ export class User {
 						...res.data.playlist
 							.slice(0, this.createdPlaylistCount)
 							.map((v: any) => {
-								const a = new PlayList(v);
-								//a.getDetail(cookie.get());
-								return a;
+								return new PlayList(v);
 							})
 					);
 					this.subPlaylists.push(
 						...res.data.playlist
 							.slice(this.createdPlaylistCount)
 							.map((v: any) => {
-								const a = new PlayList(v);
-								//a.getDetail(cookie.get());
-								return a;
+								return new PlayList(v);
 							})
 					);
-					this._infoLoaded = true;
+					this.infoLoaded = true;
 				});
+				return [
+					this.createdPlaylists.slice(0),
+					this.subPlaylists.slice(0)
+				];
 			});
 	}
 
@@ -144,17 +144,20 @@ export class User {
 	 * @param playlistId 要获取的歌单id
 	 * @returns id对应的歌单
 	 */
-	find(playlistId: string | undefined) {
+	find(playlistId: string | undefined, defaultList?: boolean) {
 		let c = cookie.get();
-		if (!playlistId || playlistId.length === 0)
-			return this.createdPlaylists[0].getDetail(c);
-		else {
-			return (
-				this.createdPlaylists.find((e) => e.id === playlistId) ||
-				this.subPlaylists.find((e) => e.id === playlistId) ||
-				new PlayList({ id: playlistId })
-			).getDetail(c);
+		if (this.createdPlaylists.length === 0) {
+			return;
 		}
+		if (!playlistId || playlistId.length === 0 || defaultList) {
+			return this.createdPlaylists[0].getDetail(c);
+		}
+
+		return (
+			this.createdPlaylists.find((e) => e.id === playlistId) ||
+			this.subPlaylists.find((e) => e.id === playlistId) ||
+			new PlayList({ id: playlistId })
+		).getDetail(c);
 	}
 	/**
 	 * 用户uid的访问器
@@ -164,7 +167,7 @@ export class User {
 	}
 
 	get status() {
-		return this._LogStatus;
+		return this.LogStatus;
 	}
 
 	get createdPlaylistCount() {
@@ -176,3 +179,6 @@ export class User {
 	}
 }
 export const user = new User(); // User类的全局单例
+autorun(() => {
+	console.log(user.createdPlaylists.length);
+});

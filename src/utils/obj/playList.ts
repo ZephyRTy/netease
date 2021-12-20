@@ -1,10 +1,11 @@
 import axios from 'axios';
 import { makeObservable, observable, runInAction } from 'mobx';
-import { realIP, serverPath } from '../utils/global';
+import { realIP, serverPath } from '../global';
+import { HaveComment } from '../interface';
+import { SongUtil } from '../SongUtil';
 import { CommentUtil } from './comment';
-import { HaveComment, SongSet } from './interface';
 import { Song } from './song';
-export class PlayList implements HaveComment, SongSet {
+export class PlayList implements HaveComment {
 	private _id: string = ''; // 歌单的id
 	private _name: string = ''; // 歌单名称
 	private _count = 0; // 歌单中歌曲的数量
@@ -12,7 +13,6 @@ export class PlayList implements HaveComment, SongSet {
 	private _creator = '';
 	comments = new CommentUtil();
 	private _coverImgUrl: string = ''; // 歌单封面
-
 	//! 歌曲数组为可观察对象，因此不能改变列表的引用
 	readonly trackIds = [] as string[]; //歌单中所有歌曲的id
 
@@ -36,11 +36,6 @@ export class PlayList implements HaveComment, SongSet {
 		this._creator = listInfo.creator?.nickname ?? '';
 	}
 
-	static getPlaylist(id: string) {
-		return axios.get(
-			`${serverPath}/user/playlist?uid=${id}&realIP=${realIP}`
-		);
-	}
 	/**
 	 * 获取歌单中所有歌曲
 	 * @param cookie 用户的cookie，只用于请求
@@ -52,6 +47,7 @@ export class PlayList implements HaveComment, SongSet {
 				`${serverPath}/playlist/detail?id=${this._id}&realIP=${realIP}&cookie=${cookie}`
 			);
 			runInAction(() => {
+				console.log(res);
 				const info = res.data.playlist;
 				if (this.name === '') {
 					this._name = info.name;
@@ -84,26 +80,31 @@ export class PlayList implements HaveComment, SongSet {
 	 * @param cookie
 	 * @param setState React组件中的setState函数
 	 */
-	async getSongs(cookie: string) {
-		if (this.trackIds.length === 0) return Promise.resolve([] as Song[]);
+	async getSongs() {
+		if (this.trackIds.length === 0) {
+			return Promise.resolve(new SongUtil());
+		}
 		try {
 			const res = await axios.get(
 				`${serverPath}/song/detail?ids=${this.trackIds.join(
 					','
-				)}&realIP=${realIP}&cookie=${cookie}`
+				)}&realIP=${realIP}`
 			);
-			return res.data.songs.map(
-				(v: any) =>
-					new Song(
-						v.name,
-						v.id,
-						v.al,
-						v.ar.map((v: any) => {
-							return { id: v.id, name: v.name };
-						}),
-						v.dt
-					)
-			) as Song[];
+			const s = new SongUtil(
+				res.data.songs.map(
+					(v: any) =>
+						new Song(
+							v.name,
+							v.id,
+							v.al,
+							v.ar.map((v: any) => {
+								return { id: v.id, name: v.name };
+							}),
+							v.dt
+						)
+				) as Song[]
+			);
+			return s;
 		} catch (message) {
 			return console.log(message);
 		}

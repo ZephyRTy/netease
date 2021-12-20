@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { Lyric, LyricItem } from '../../utils/lyric';
+import { Lyric, LyricItem } from '../../utils/obj/lyric';
 import { Timer } from '../../utils/timer';
 import './style/lyric.scss';
 
@@ -16,7 +16,9 @@ export const LyricList = (props: { lyric: Lyric; start: number }) => {
 	const ref = useRef(null as unknown as HTMLDivElement);
 	const [timer, setTimer] = useState(null as unknown as Timer);
 	useLayoutEffect(() => {
-		if (!props.lyric) return;
+		if (!props.lyric) {
+			return;
+		}
 		let parent = ref.current.firstElementChild?.childNodes;
 		parent?.forEach((v, i) => {
 			props.lyric.item(i).pos = (v as HTMLParagraphElement).offsetTop;
@@ -28,7 +30,9 @@ export const LyricList = (props: { lyric: Lyric; start: number }) => {
 		};
 	}, [props.lyric]);
 	useEffect(() => {
-		if (!timer) return;
+		if (!timer) {
+			return;
+		}
 		switch (props.start) {
 			case 0:
 				timer.end();

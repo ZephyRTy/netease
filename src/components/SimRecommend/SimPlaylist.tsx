@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { PlayList } from '../../utils/playList';
+import { useDataFetch } from '../../utils/hooks/useAsync';
+import { PlayList } from '../../utils/obj/playList';
+import { SimUtil } from '../../utils/sim';
 import { SimTitle } from './SimTitle';
 import './style/simPlaylist.scss';
 const SimPlaylistItem = (props: { playlist: PlayList }) => {
@@ -29,11 +31,19 @@ const SimPlaylistItem = (props: { playlist: PlayList }) => {
 	);
 };
 
-export const SimPlaylist = (props: { playlists: PlayList[] }) => {
+export const SimPlaylist = (props: { id: string }) => {
+	const [playlists, setPlaylists] = useState([] as PlayList[]);
+	useDataFetch(
+		() => {
+			return SimUtil.getSim(props.id, 'playlist');
+		},
+		setPlaylists,
+		[props.id]
+	);
 	return (
 		<div className="sim-playlist-wrapper">
 			<SimTitle title="相似的歌单" />
-			{props.playlists.map((v, i) => (
+			{playlists?.map((v, i) => (
 				<SimPlaylistItem key={i} playlist={v} />
 			))}
 		</div>

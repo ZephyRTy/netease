@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React from 'react';
-import { cookie, realIP, serverPath } from '../utils/global';
+import { cookie, realIP, serverPath } from '../global';
 export interface IAlbum {
 	id: string;
 	name: string;
