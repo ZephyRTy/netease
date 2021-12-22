@@ -2,8 +2,8 @@ import { observer } from 'mobx-react';
 import React, { useState } from 'react';
 import { useParams } from 'react-router';
 import { useDataFetch } from '../../../utils/hooks/useAsync';
-import { PlayList } from '../../../utils/obj/playList';
-import { user } from '../../../utils/obj/user';
+import { PlayList } from '../../../utils/model/playList';
+import { user } from '../../../utils/model/user';
 import { CommentList } from '../CommentList';
 import { PlaylistInfo } from '../Playlists/PlaylistInfo';
 import '../style/songList.scss';
@@ -14,7 +14,7 @@ export const SongListWrapper = observer(
 		const [playlist, setPlaylist] = useState(null as unknown as PlayList);
 		useDataFetch(
 			() => {
-				return props.user.find(id, props.defaultList);
+				return PlayList.derive(id, props.user, props.defaultList);
 			},
 			setPlaylist,
 			[id, user.infoLoaded],

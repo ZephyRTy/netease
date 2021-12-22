@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDataFetch } from '../../utils/hooks/useAsync';
-import { PlayList } from '../../utils/obj/playList';
+import { PlayList } from '../../utils/model/playList';
 import { SimUtil } from '../../utils/sim';
 import { SimTitle } from './SimTitle';
 import './style/simPlaylist.scss';

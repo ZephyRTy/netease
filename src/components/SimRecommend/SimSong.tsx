@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDataFetch } from '../../utils/hooks/useAsync';
-import { Song } from '../../utils/obj/song';
+import { Song } from '../../utils/model/song';
 import { SimUtil } from '../../utils/sim';
 import { SimTitle } from './SimTitle';
 import './style/simSong.scss';

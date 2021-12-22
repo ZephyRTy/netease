@@ -84,4 +84,7 @@ export class Song {
 	get duration() {
 		return Song.parse(this._duration, false);
 	}
+	get idOfArtist() {
+		return this._artists[0].id;
+	}
 }

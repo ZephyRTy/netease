@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { Lyric, LyricItem } from '../../utils/obj/lyric';
+import { Lyric, LyricItem } from '../../utils/model/lyric';
 import { Timer } from '../../utils/timer';
 import './style/lyric.scss';
 

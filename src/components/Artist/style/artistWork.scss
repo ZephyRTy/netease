@@ -1,0 +1,22 @@
+.artist-works {
+	width: auto;
+	list-style: none;
+	&-item {
+		width: 600px;
+		border-bottom: 1px gray solid;
+		height: 40px;
+		display: flex;
+		align-items: center;
+		span {
+			display: inline-block;
+		}
+		&-name {
+			width: 200px;
+		}
+		&-duration {
+			width: 100px;
+			position: relative;
+			right: -50%;
+		}
+	}
+}

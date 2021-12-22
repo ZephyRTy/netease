@@ -1,0 +1,19 @@
+.sim-artist {
+	display: grid;
+	grid-template-columns: repeat(3, 33%);
+	grid-template-rows: repeat(2, auto);
+	grid-column-gap: 3px;
+	grid-row-gap: 5px;
+	margin-top: 10px;
+	&-wrapper {
+		display: flex;
+		flex-direction: column;
+		margin-right: 10px;
+	}
+	&-item {
+		img {
+			width: 70px;
+			height: 70px;
+		}
+	}
+}

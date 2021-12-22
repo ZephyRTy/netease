@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
-import { Comment, CommentUtil } from './obj/comment';
-import { SongUtil } from './SongUtil';
+import { Comment, CommentUtil } from './model/comment';
+import { SongSet } from './SongSet';
 
 export interface HaveComment {
 	comments: CommentUtil;
@@ -8,6 +8,6 @@ export interface HaveComment {
 }
 
 export interface HaveSongSet {
-	songSet: SongUtil;
-	getSongs(cookie: string): Promise<void | SongUtil>;
+	songSet: SongSet;
+	getSongs(): Promise<SongSet | void>;
 }

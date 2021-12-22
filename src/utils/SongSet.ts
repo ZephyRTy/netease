@@ -1,6 +1,6 @@
-import { Song } from './obj/song';
+import { Song } from './model/song';
 
-export class SongUtil {
+export class SongSet {
 	private songs = [] as Song[];
 
 	constructor(songs?: Song[]) {

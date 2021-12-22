@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
-import { User } from '../../utils/obj/user';
+import { User } from '../../utils/model/user';
 import './main-content.scss';
 
 export const MainContentLayout = (props: { user: User }) => {
