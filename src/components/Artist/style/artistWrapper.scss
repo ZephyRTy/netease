@@ -1,0 +1,10 @@
+.artist-wrapper {
+	display: flex;
+	width: 89%;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	.song-detail-wrapper {
+		width: 640px;
+	}
+}
