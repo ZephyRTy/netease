@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Lyric } from '../../utils/obj/lyric';
-import { Track } from '../../utils/obj/track';
+import { Lyric } from '../../utils/model/lyric';
+import { Track } from '../../utils/model/track';
 import { LyricList } from './Lyric';
 
 const TrackInfoSpan = (props: {

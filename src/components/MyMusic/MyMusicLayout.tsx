@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import { user } from '../../utils/obj/user';
+import { user } from '../../utils/model/user';
 import { PlaylistsWrapper } from './Playlists/Playlists';
 import { SongListWrapper } from './SongList/SongListWrapper';
 import './style/myMusic.scss';

@@ -1,17 +1,19 @@
 import axios from 'axios';
 import { cookie, realIP, serverPath } from './global';
-import { PlayList } from './obj/playList';
-import { IAlbum, IArtist, Song } from './obj/song';
+import { Artist } from './model/artist';
+import { PlayList } from './model/playList';
+import { IAlbum, IArtist, Song } from './model/song';
 
 export class SimUtil {
 	private constructor() {}
-	static async getSim(id: string, mode: 'song' | 'playlist') {
+	static async getSim(id: string, mode: 'song' | 'playlist' | 'artist') {
 		if (!id) {
 			return;
 		}
 		const res = await axios.get(
 			`${serverPath}/simi/${mode}?id=${id}&realIP=${realIP}&cookie=${cookie.get()}`
 		);
+		console.log(res);
 		return SimUtil.utils[mode as string](res.data[`${mode}s`]);
 	}
 	private static utils: { [song: string]: Function; playlist: Function } = {
@@ -45,6 +47,16 @@ export class SimUtil {
 			}[]
 		) {
 			return info.map((v) => new PlayList(v));
+		},
+		artist(
+			param: {
+				id: string;
+				name?: string;
+				url?: string;
+				desc?: string;
+			}[]
+		) {
+			return param.map((v) => new Artist(v)).slice(0, 6);
 		}
 	};
 }

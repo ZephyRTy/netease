@@ -2,8 +2,8 @@
 import { observer } from 'mobx-react-lite';
 import React, { useEffect, useState } from 'react';
 import { useDataFetch } from '../../../utils/hooks/useAsync';
-import { PlayList } from '../../../utils/obj/playList';
-import { user } from '../../../utils/obj/user';
+import { PlayList } from '../../../utils/model/playList';
+import { user } from '../../../utils/model/user';
 import '../style/playlist.scss';
 
 // 歌单列表的展示组件
