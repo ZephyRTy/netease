@@ -4,6 +4,14 @@
 		width: auto;
 	}
 	&-name {
-		margin: 10px 0;
+		margin: {
+			top: 10px;
+			bottom: 30px;
+		}
+		font-size: 25px;
+		font-weight: 600;
+		span {
+			border-bottom: 3px red dotted;
+		}
 	}
 }

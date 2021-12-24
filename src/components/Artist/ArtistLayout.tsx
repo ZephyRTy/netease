@@ -5,7 +5,6 @@ import { Artist } from '../../utils/model/artist';
 import { SimArtist } from '../SimRecommend/SimArtist';
 import { SimWrapper } from '../SimRecommend/SimWrapper';
 import { ArtistWrapper } from './ArtistWrapper';
-import './style/artistLayout.scss';
 export const ArtistLayout = () => {
 	const { id } = useParams();
 	const [artist, setArtist] = useState(null as unknown as Artist);
@@ -21,7 +20,7 @@ export const ArtistLayout = () => {
 		null as any
 	);
 	return (
-		<div className="artist-layout">
+		<div className="artist-layout songSet-layout">
 			<ArtistWrapper artist={artist} />
 			<SimWrapper>
 				<SimArtist id={artist?.id} />
