@@ -1,5 +1,6 @@
 import React from 'react';
 import './style/SongCover.scss';
+import { getCount, getSizeImage } from '../../../utils/format';
 
 export const SongCover = (
 	props:{ info: any, songList: any, width: 140 }
@@ -29,12 +30,12 @@ export const SongCover = (
     return (
 		<div className="SongCoverWrapper">
 			<div className="SongCoverWrapper-cover-wrapper">
-				<img src={picUrl} alt="" className="SongCoverWrapper-img" />
+				<img src={getSizeImage(picUrl, 140)} alt="" className="SongCoverWrapper-img" />
 				<div className="SongCoverWrapper-cover-mask">
 					<div className="SongCoverWrapper-cover-mask-bottom-bar">
 						<span>
 							<i className="SongCoverWrapper-cover-mask-bottom-bar-erji"></i>
-							{playCount}
+							{getCount(playCount)}
 						</span>
 						<i className="SongCoverWrapper-cover-mask-bottom-bar-play"></i>
 					</div>

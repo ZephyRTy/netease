@@ -42,9 +42,17 @@ export const HotRecommend = () => {
 			/>
 			<div className="HotRecommendWrapper-recommend-list">
 				{hotRecommend && hotRecommend.map((item: any) => {
-					return <SongCover info={item} key={item.id} songList={''}
-width={140}
-					       />;
+					return (
+						<SongCover
+							
+							info={item}
+							key={item.id}
+							songList={undefined}
+							width={140}
+						/>
+						
+					); 
+					
 				}
 				)}
 			</div>
