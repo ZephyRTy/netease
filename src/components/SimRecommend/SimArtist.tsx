@@ -22,18 +22,18 @@ export const SimArtist = (props: { id: string }) => {
 			<SimTitle title="相似的歌手" />
 			<div className="sim-artist">
 				{artists.map((v, i) => {
-					return <SimArtistItem key={i} url={v.cover} />;
+					return <SimArtistItem artist={v} key={i} />;
 				})}
 			</div>
 		</div>
 	);
 };
 
-const SimArtistItem = (props: { url: string }) => {
+const SimArtistItem = (props: { artist: Artist }) => {
 	const [cover, setCover] = useState('');
 	useEffect(() => {
 		const img = new Image();
-		img.src = props.url + '?param=70y70';
+		img.src = props.artist.cover + '?param=70y70';
 		img.onload = () => {
 			img.onload = null;
 			setCover(img.src);
@@ -41,10 +41,13 @@ const SimArtistItem = (props: { url: string }) => {
 		return () => {
 			img.onload = null;
 		};
-	}, [props.url]);
+	}, [props.artist]);
 	return (
 		<div className="sim-artist-item">
 			<img alt="" src={cover} />
+			<span title={props.artist.name}>
+				<a href={`#/artist/${props.artist.id}`}>{props.artist.name}</a>
+			</span>
 		</div>
 	);
 };
