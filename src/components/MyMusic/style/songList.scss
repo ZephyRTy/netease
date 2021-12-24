@@ -83,6 +83,9 @@
 			&-duration {
 				&-span {
 					@include info-span(50px);
+					a {
+						cursor: default;
+					}
 				}
 			}
 			&-artists {
