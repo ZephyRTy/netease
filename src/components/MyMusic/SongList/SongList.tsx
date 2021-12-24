@@ -46,6 +46,7 @@ export const SongItem = (props: {
 			{props.mode === 'album' ? null : (
 				<SongInfoSpan
 					content={props.song.album.name}
+					href={`album/${props.song.album.id}`}
 					name="song-detail-list-item-album"
 				/>
 			)}
