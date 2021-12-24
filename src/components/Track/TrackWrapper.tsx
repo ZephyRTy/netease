@@ -1,5 +1,5 @@
 import React from 'react';
-import { Track } from '../../utils/obj/track';
+import { Track } from '../../utils/model/track';
 import { CommentList } from '../MyMusic/CommentList';
 import './style/track.scss';
 import { TrackInfo } from './TrackInfo';

@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import React, { useEffect, useState } from 'react';
 import Img from '../../../static/cover.jpg';
-import { PlayList } from '../../../utils/obj/playList';
+import { PlayList } from '../../../utils/model/playList';
 import '../style/playlistInfo.scss';
 
 // 歌单页面中最上方的歌单信息

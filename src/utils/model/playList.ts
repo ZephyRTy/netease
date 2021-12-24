@@ -1,16 +1,18 @@
 import axios from 'axios';
 import { makeObservable, observable, runInAction } from 'mobx';
 import { realIP, serverPath } from '../global';
-import { HaveComment } from '../interface';
-import { SongUtil } from '../SongUtil';
+import { HaveComment, HaveSongSet } from '../interface';
+import { SongSet } from '../SongSet';
 import { CommentUtil } from './comment';
 import { Song } from './song';
-export class PlayList implements HaveComment {
+import { User } from './user';
+export class PlayList implements HaveComment, HaveSongSet {
 	private _id: string = ''; // 歌单的id
 	private _name: string = ''; // 歌单名称
 	private _count = 0; // 歌单中歌曲的数量
 	private _description = '';
 	private _creator = '';
+	songSet: SongSet = new SongSet();
 	comments = new CommentUtil();
 	private _coverImgUrl: string = ''; // 歌单封面
 	//! 歌曲数组为可观察对象，因此不能改变列表的引用
@@ -36,8 +38,12 @@ export class PlayList implements HaveComment {
 		this._creator = listInfo.creator?.nickname ?? '';
 	}
 
+	static derive(id: string | undefined, user: User, defaultList?: boolean) {
+		return user.find(id, defaultList);
+	}
 	/**
 	 * 获取歌单中所有歌曲
+	 * complete Playlist
 	 * @param cookie 用户的cookie，只用于请求
 	 */
 	async getDetail(cookie: string) {
@@ -77,12 +83,13 @@ export class PlayList implements HaveComment {
 
 	/**
 	 * 获取歌单中歌曲的详细信息
+	 * derive SongSet
 	 * @param cookie
 	 * @param setState React组件中的setState函数
 	 */
 	async getSongs() {
 		if (this.trackIds.length === 0) {
-			return Promise.resolve(new SongUtil());
+			return Promise.resolve(new SongSet());
 		}
 		try {
 			const res = await axios.get(
@@ -90,7 +97,7 @@ export class PlayList implements HaveComment {
 					','
 				)}&realIP=${realIP}`
 			);
-			const s = new SongUtil(
+			this.songSet = new SongSet(
 				res.data.songs.map(
 					(v: any) =>
 						new Song(
@@ -104,7 +111,7 @@ export class PlayList implements HaveComment {
 						)
 				) as Song[]
 			);
-			return s;
+			return this.songSet;
 		} catch (message) {
 			return console.log(message);
 		}

@@ -18,7 +18,7 @@ export class Track extends Song implements HaveComment {
 		super(name, id, albumInfo, artists, duration);
 	}
 
-	static async createTrack(id: string) {
+	static async derive(id: string) {
 		return axios
 			.get(
 				`${serverPath}/song/detail?ids=${id}&realIP=${realIP}&cookie=${cookie}`
@@ -37,6 +37,10 @@ export class Track extends Song implements HaveComment {
 			})
 			.catch(console.log);
 	}
+
+	/**
+	 * derive Lyric
+	 */
 	async getLyric() {
 		return this.lyric.getLyric(this.id);
 	}

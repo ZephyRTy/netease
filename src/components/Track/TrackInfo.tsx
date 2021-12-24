@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Lyric } from '../../utils/obj/lyric';
-import { Track } from '../../utils/obj/track';
+import { Lyric } from '../../utils/model/lyric';
+import { Track } from '../../utils/model/track';
 import { LyricList } from './Lyric';
 
 const TrackInfoSpan = (props: {
@@ -65,27 +65,28 @@ export const TrackInfo = (props: { track: Track }) => {
 			</div>
 			<div className="track-info">
 				<TrackGeneralInfo track={props.track} />
-				<button
-					onClick={() => {
-						setStart(1);
-					}}
-				>
-					播放
-				</button>
-				<button
-					onClick={() => {
-						setStart(2);
-					}}
-				>
-					暂停
-				</button>
-				<button
-					onClick={() => {
-						setStart(0);
-					}}
-				>
-					end
-				</button>
+
+				<div className="controller-icon">
+					<i
+						className="uil uil-play"
+						onClick={() => {
+							setStart(1);
+						}}
+					></i>
+					<i
+						className="uil uil-pause"
+						onClick={() => {
+							setStart(2);
+						}}
+					></i>
+					<i
+						className="uil uil-stop-circle"
+						onClick={() => {
+							setStart(0);
+						}}
+					></i>
+				</div>
+
 				<LyricList lyric={lyric} start={start} />
 			</div>
 		</div>

@@ -1,0 +1,14 @@
+.album-info {
+	display: flex;
+	width: 86%;
+	margin: {
+		top: 20px;
+		bottom: 30px;
+	}
+	&-cover {
+		width: 30%;
+		img {
+			width: 100px;
+		}
+	}
+}

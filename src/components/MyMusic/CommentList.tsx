@@ -2,7 +2,7 @@ import { observer } from 'mobx-react';
 import React, { useEffect, useState } from 'react';
 import { useDataFetch } from '../../utils/hooks/useAsync';
 import { HaveComment } from '../../utils/interface';
-import { Comment } from '../../utils/obj/comment';
+import { Comment } from '../../utils/model/comment';
 import './style/commentList.scss';
 
 // 歌单评论

@@ -1,8 +1,8 @@
 import axios from 'axios';
-import { action, autorun, makeObservable, observable, runInAction } from 'mobx';
+import { action, makeObservable, observable, runInAction } from 'mobx';
+import Cookie from 'react-cookies';
 import { cookie, realIP, serverPath } from '../global';
 import { PlayList } from './playList';
-
 interface ISubInfo {
 	createdPlaylistCount: number;
 	subPlaylistCount: number;
@@ -66,6 +66,8 @@ export class User {
 					throw new Error('密码错误');
 				}
 				cookie.set(res.data.cookie);
+				Cookie.save('phone', phone, { path: '/' });
+				Cookie.save('password', password, { path: '/' });
 				this._uid = res.data.account.id;
 				runInAction(() => {
 					this.LogStatus = true;
@@ -91,6 +93,7 @@ export class User {
 
 	/**
 	 * 获取用户的所有歌单信息
+	 * derive Playlist
 	 */
 	async getAllPlaylists() {
 		this.infoLoaded = false;
@@ -179,6 +182,3 @@ export class User {
 	}
 }
 export const user = new User(); // User类的全局单例
-autorun(() => {
-	console.log(user.createdPlaylists.length);
-});

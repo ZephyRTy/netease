@@ -1,0 +1,36 @@
+.sim-artist {
+	display: grid;
+	grid-template-columns: repeat(3, 33%);
+	grid-template-rows: repeat(2, auto);
+	grid-column-gap: 5px;
+	grid-row-gap: 30px;
+	margin-top: 10px;
+	&-wrapper {
+		display: flex;
+		flex-direction: column;
+		margin-right: 10px;
+	}
+	&-item {
+		img {
+			width: 70px;
+			height: 70px;
+		}
+		span {
+			display: block;
+			font-size: 10px;
+			line-height: 14px;
+			height: 14px;
+			width: 75px;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			a {
+				&:link,
+				&:visited {
+					color: initial;
+					text-decoration: none;
+				}
+			}
+		}
+	}
+}

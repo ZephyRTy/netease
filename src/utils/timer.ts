@@ -1,4 +1,4 @@
-import { LyricItem } from './obj/lyric';
+import { LyricItem } from './model/lyric';
 
 export class Timer {
 	private interval = 0;
