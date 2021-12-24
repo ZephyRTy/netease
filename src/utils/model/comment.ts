@@ -59,7 +59,7 @@ export class CommentUtil {
 	 */
 	async getComments(
 		id: string,
-		mode: 'music' | 'playlist',
+		mode: 'music' | 'playlist' | 'album',
 		cookieValue = cookie.get()
 	) {
 		return axios
