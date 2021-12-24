@@ -1,6 +1,7 @@
 import React from 'react';
 import { HashRouter, Route, Routes } from 'react-router-dom';
 import { User } from '../utils/model/user';
+import { AlbumLayout } from './Album/AlbumLayout';
 import { ArtistLayout } from './Artist/ArtistLayout';
 import { MainContentLayout } from './MainContent/MainContent';
 import { MyMusicLayout } from './MyMusic/MyMusicLayout';
@@ -20,6 +21,7 @@ export const Router = (props: { user: User }) => {
 					/>
 					<Route element={<TrackLayout />} path="track/:id"></Route>
 					<Route element={<ArtistLayout />} path="artist/:id"></Route>
+					<Route element={<AlbumLayout />} path="album/:id"></Route>
 				</Route>
 			</Routes>
 		</HashRouter>
