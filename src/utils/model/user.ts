@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { action, makeObservable, observable, runInAction } from 'mobx';
+import Cookie from 'react-cookies';
 import { cookie, realIP, serverPath } from '../global';
 import { PlayList } from './playList';
-
 interface ISubInfo {
 	createdPlaylistCount: number;
 	subPlaylistCount: number;
@@ -66,6 +66,8 @@ export class User {
 					throw new Error('密码错误');
 				}
 				cookie.set(res.data.cookie);
+				Cookie.save('phone', phone, { path: '/' });
+				Cookie.save('password', password, { path: '/' });
 				this._uid = res.data.account.id;
 				runInAction(() => {
 					this.LogStatus = true;
