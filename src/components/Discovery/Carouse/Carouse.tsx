@@ -1,9 +1,10 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { Carousel } from 'antd';
-import { action, makeObservable, observable } from 'mobx';
-import { cookie, realIP, serverPath } from '../../../utils/global';
+import { realIP, serverPath } from '../../../utils/global';
 import './style/Carouse.scss';
-import Item from 'antd/lib/list/Item';
+import axios from 'axios';
+import { isConstructorDeclaration } from 'typescript';
+
 export const Carouse = () => {
 	const [curentIndex, setCurentIndex] = useState(0);
 	const bannerRef = useRef();
@@ -11,39 +12,52 @@ export const Carouse = () => {
 		setCurentIndex(to);
 	}, []);
 
-	let topBanner: any;
-	useEffect(()=>{
+	const [topBanner, settopBanner] = useState([]);
+	useEffect(() => {
 		const url = `${serverPath}/banner?realIP=${realIP}`;
-		fetch(url, {
-			method: 'GET'
-		})
-		.then((res) => {
-			return res.json();
-		})
-		.then((data)=>{
-			console.log(data);
-			topBanner = data['banners']
-		})
-		.catch((err) => console.log(err));
-	})
-	
+		const fetchData = async () => {
+			const result = await axios(url);
+			settopBanner(result.data['banners']);
+		};
+		fetchData();
+	}, []);
+
 	return (
-		<div>
-			<Carousel
-				autoplay
-				beforeChange={bannerChange}
-				effect="fade"
-				
-			>
-				{topBanner &&
-					topBanner.map((item: any, index: number) => {
-						return (
-							<div key={index}>
-								<img alt={item.typeTitle} src={item.imageUrl} />
-							</div>
-						);
-					})}
-			</Carousel>
+		<div className="BannerWrapper">
+			<div className="BannerWrapper-banner">
+				<div className="BannerLeft">
+					<Carousel
+						autoplay
+						beforeChange={bannerChange}
+						dots={false}
+						effect="fade"
+						ref={bannerRef as any}
+					>
+						{topBanner &&
+							topBanner.map((item: any) => {
+								return (
+									<div key={item.imageUrl}>
+										<img
+											alt={item.typeTitle}
+											className="BannerLeft-img"
+											src={item.imageUrl}
+										/>
+									</div>
+								);
+							})}
+					</Carousel>
+				</div>
+				<div className="BannerControl">
+					<button
+						className="BannerControl-btn"
+						onClick={() => (bannerRef as any).current.prev()}
+					></button>
+					<button
+						className="BannerControl-btn"
+						onClick={() => (bannerRef as any).current.next()}
+					></button>
+				</div>
+			</div>
 		</div>
 	);
 };
