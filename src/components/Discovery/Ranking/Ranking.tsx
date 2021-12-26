@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { cookie, realIP, serverPath } from '../../../utils/global';
+import { serverPath } from '../../../utils/global';
 import { TitleTheme } from '../TitleTheme/TitleTheme';
 import { TopList } from '../TopList/TopList';
 import './style/Ranking.scss';
@@ -14,25 +14,20 @@ export const Ranking = () => {
 		const url3 = `${serverPath}/playlist/detail?id=2884035`;
 		const fetchData1 = async () => {
 			const result = await axios(url1);
-			console.log(result);
-			setspeedRanking(result.data['privileges']);
+			setspeedRanking(result.data['playlist']['tracks']);
 		};
 		const fetchData2 = async () => {
 			const result = await axios(url2);
-			setnewSongRanking(result.data['privileges']);
+			setnewSongRanking(result.data['playlist']['tracks']);
 		};
 		const fetchData3 = async () => {
 			const result = await axios(url3);
-			setoriginalRanking(result.data['privileges']);
+			setoriginalRanking(result.data['playlist']['tracks']);
 		};
 		fetchData1();
 		fetchData2();
 		fetchData3();
 	}, []);
-	console.log(speedRanking);
-	console.log(newSongRanking);
-	console.log(originalRanking);
-
 	return (
 		<div className="RankingWrapper">
 			<TitleTheme

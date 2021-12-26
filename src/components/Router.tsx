@@ -24,7 +24,7 @@ export const Router = (props: { user: User }) => {
 					<Route element={<ArtistLayout />} path="artist/:id"></Route>
 					<Route element={<AlbumLayout />} path="album/:id"></Route>
 				</Route>
-				<Route element={<IndexPage />} index />
+				<Route element={<IndexPage user={props.user} />} index />
 			</Routes>
 		</HashRouter>
 	);

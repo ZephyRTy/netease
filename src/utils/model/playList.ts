@@ -53,7 +53,6 @@ export class PlayList implements HaveComment, HaveSongSet {
 				`${serverPath}/playlist/detail?id=${this._id}&realIP=${realIP}&cookie=${cookie}`
 			);
 			runInAction(() => {
-				console.log(res);
 				const info = res.data.playlist;
 				if (this.name === '') {
 					this._name = info.name;

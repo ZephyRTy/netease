@@ -58,9 +58,10 @@ export class User {
 				`${serverPath}/login/${mode}?phone=${phone}&password=${password}&realIP=${realIP}`
 			)
 			.then((res) => {
-				console.log(res);
 				if (res.data.code === 502) {
 					throw new Error('密码错误');
+				} else {
+					alert('登录成功');
 				}
 				cookie.set(res.data.cookie);
 				Cookie.save('phone', phone, { path: '/' });

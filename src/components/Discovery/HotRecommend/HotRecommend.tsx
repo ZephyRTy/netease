@@ -15,21 +15,6 @@ export const HotRecommend = () => {
 		};
 		fetchData();
 	}, []);
-	console.log(hotRecommend);
-	// useEffect(() => {
-	// 	const url = `${serverPath}/personalized?realIP=${realIP}`;
-	// 	fetch(url, {
-	// 		method: 'GET'
-	// 	})
-	// 		.then((res) => {
-	// 			return res.json();
-	// 		})
-	// 		.then((data) => {
-	// 			console.log(data)
-	// 			hotrecommend = data['result'];
-	// 		})
-	// 		.catch((err) => console.log(err));
-	// });
 
 	return (
 		<div className="HotRecommendWrapper">
