@@ -1,8 +1,8 @@
-import './style/LoginForm.scss';
-import React, { useEffect, useState } from 'react';
+import { Button, Checkbox, Form, Input } from 'antd';
+import React, { useEffect } from 'react';
 import cookies from 'react-cookies';
-import { Form, Input, Button, message, Checkbox } from 'antd';
 import { user } from '../../../utils/model/user';
+import './style/LoginForm.scss';
 
 export const LoginForm = () => {
 	const [form] = Form.useForm();
@@ -17,6 +17,7 @@ export const LoginForm = () => {
 	return (
 		<Form
 			autoComplete="off"
+			form={form}
 			initialValues={{ remember: true }}
 			labelCol={{ span: 8 }}
 			name="basic"

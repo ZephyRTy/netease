@@ -25,19 +25,10 @@ export class Timer {
 			if (this.current >= this.lyrics.length || !this.id) {
 				return;
 			}
-			console.log(
-				'int:' +
-					this.interval +
-					'; time: ' +
-					this.lyrics[this.current].time
-			);
-
 			if (this.interval === this.lyrics[this.current].time) {
 				if (this.current) {
 					this.lyrics[this.current - 1].unfocus();
 				}
-				//console.log(this.current + '/' + this._lyrics.length);
-
 				this.lyrics[this.current].focus();
 				this.div.scrollTo({
 					top:

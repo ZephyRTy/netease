@@ -1,1 +1,8 @@
 $border-theme: 2px solid#bdbdbdde;
+a {
+	&:link,
+	&:visited {
+		color: initial;
+		text-decoration: none;
+	}
+}

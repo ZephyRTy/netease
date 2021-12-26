@@ -1,10 +1,16 @@
 import React from 'react';
 import './App.scss';
+import { Navbar } from './components/Discovery/NavBar/Navbar';
 import { Router } from './components/Router';
+import './style/global.scss';
 import './style/SongSetLayout.scss';
 import { user } from './utils/model/user';
-import { LoginForm } from './components/Discovery/Login-form/LoginForm';
 function App() {
-	return <LoginForm />
+	return (
+		<>
+			<Navbar />
+			<Router user={user} />
+		</>
+	);
 }
 export default App;
