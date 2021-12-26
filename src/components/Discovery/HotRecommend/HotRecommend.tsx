@@ -1,21 +1,21 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { realIP, serverPath } from '../../../utils/global';
-import { TitleTheme } from '../TitleTheme/TitleTheme';
 import { SongCover } from '../SongCover/SongCover';
+import { TitleTheme } from '../TitleTheme/TitleTheme';
+import './style/HotRecommend.scss';
 export const HotRecommend = () => {
-	
 	const [hotRecommend, sethotRecommend] = useState([]);
 
 	useEffect(() => {
 		const url = `${serverPath}/personalized?realIP=${realIP}`;
 		const fetchData = async () => {
 			const result = await axios(url);
-			sethotRecommend(result.data['result'])
+			sethotRecommend(result.data['result']);
 		};
 		fetchData();
 	}, []);
-	console.log(hotRecommend)
+	console.log(hotRecommend);
 	// useEffect(() => {
 	// 	const url = `${serverPath}/personalized?realIP=${realIP}`;
 	// 	fetch(url, {
@@ -41,20 +41,17 @@ export const HotRecommend = () => {
 				title="热门推荐"
 			/>
 			<div className="HotRecommendWrapper-recommend-list">
-				{hotRecommend && hotRecommend.map((item: any) => {
-					return (
-						<SongCover
-							
-							info={item}
-							key={item.id}
-							songList={undefined}
-							width={140}
-						/>
-						
-					); 
-					
-				}
-				)}
+				{hotRecommend &&
+					hotRecommend.map((item: any) => {
+						return (
+							<SongCover
+								info={item}
+								key={item.id}
+								songList={undefined}
+								width={140}
+							/>
+						);
+					})}
 			</div>
 		</div>
 	);

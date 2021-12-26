@@ -6,30 +6,30 @@
 
 .CategoryList {
 	display: flex;
-    justify-content: center;
+	justify-content: center;
 	padding-left: 180px;
 	width: 1100px;
 	margin: 0 auto;
 	&-item {
-        display: flex;
-        justify-content: center;
-        align-items: center;
+		display: flex;
+		justify-content: center;
+		align-items: center;
 		list-style-type: none;
 		height: 80px;
 		padding: 0 13px;
 		margin: 0;
 		color: rgb(228, 210, 210);
+		a {
+			color: #e4d2d2 !important;
+		}
 		&:hover,
 		.menu-active {
 			text-decoration: none;
 			background-color: rgb(0, 0, 0);
-            color:#fff
+			color: #fff;
 		}
 	}
 }
 
-.Button{
-
+.Button {
 }
-
-

@@ -1,11 +1,9 @@
 import React from 'react';
 import { getSizeImage } from '../../../utils/format';
-import './style/AlbumCover.scss'
+import './style/AlbumCover.scss';
 
-export const AlbumCover = (props:{
-    info:any
-}) => {
-    return (
+export const AlbumCover = (props: { info: any }) => {
+	return (
 		<div className="AlbumCoverWrapper">
 			<div className="AlbumCoverWrapper-album-image">
 				<img
@@ -14,9 +12,11 @@ export const AlbumCover = (props:{
 				/>
 			</div>
 			<div className="AlbumCoverWrapper-album-name">
-				{props.info.name}
+				<a href={`#/album/${props.info.id}`}>{props.info.name}</a>
 			</div>
-			<div className="AlbumCoverWrapper-artist">{props.info.artist.name}</div>
+			<div className="AlbumCoverWrapper-artist">
+				{props.info.artist.name}
+			</div>
 		</div>
 	);
-}
+};

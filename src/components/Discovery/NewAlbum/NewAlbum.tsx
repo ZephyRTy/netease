@@ -1,7 +1,7 @@
+import { Carousel } from 'antd';
 import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
 import { realIP, serverPath } from '../../../utils/global';
-import { Carousel } from 'antd';
 import { AlbumCover } from '../AlbumCover/AlbumCover';
 import { TitleTheme } from '../TitleTheme/TitleTheme';
 import './style/NewAlbum.scss';
@@ -15,14 +15,16 @@ export const NewAlbum = () => {
 		};
 		fetchData();
 	}, []);
-    
+
 	const albumRef = useRef();
 	return (
 		<div className="NewAlbumWrapper">
 			<TitleTheme
-				
-                keywords={['']} keywordsClick={undefined} right={undefined}
-showIcon={undefined} title="新碟上架"
+				keywords={['']}
+				keywordsClick={undefined}
+				right={undefined}
+				showIcon={undefined}
+				title="新碟上架"
 			/>
 			<div className="NewAlbumWrapper-content">
 				<div className="NewAlbumWrapper-content-inner">
@@ -30,17 +32,19 @@ showIcon={undefined} title="新碟上架"
 						{[0, 1].map((item) => {
 							return (
 								<div className="page" key={item}>
-									{newAlbum &&
-										newAlbum
-											.slice(item * 5, (item + 1) * 5)
-											.map((cItem: any) => {
-												return (
-													<AlbumCover
-														info={cItem}
-														key={cItem.id}
-													/>
-												);
-											})}
+									<div className="page-wrapper">
+										{newAlbum &&
+											newAlbum
+												.slice(item * 5, (item + 1) * 5)
+												.map((cItem: any) => {
+													return (
+														<AlbumCover
+															info={cItem}
+															key={cItem.id}
+														/>
+													);
+												})}
+									</div>
 								</div>
 							);
 						})}

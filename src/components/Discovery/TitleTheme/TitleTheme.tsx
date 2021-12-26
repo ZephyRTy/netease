@@ -1,9 +1,5 @@
-import React, { useRef, useEffect, useState, useCallback } from 'react';
-
-import { realIP, serverPath } from '../../../utils/global';
+import React from 'react';
 import './style/TitleTheme.scss';
-import axios from 'axios';
-import { title } from 'process';
 
 export const TitleTheme = (props: {
 	title: any;
@@ -12,7 +8,7 @@ export const TitleTheme = (props: {
 	right: any;
 	keywordsClick: any;
 }) => {
-    return (
+	return (
 		<div className="TitleThemeWrapper">
 			<div className="TitleThemeLeft">
 				<h2 className="TitleThemeLeft-hot-title">{props.title}</h2>
@@ -34,6 +30,5 @@ export const TitleTheme = (props: {
 				<span>{props.right}</span>
 			</div>
 		</div>
-	);;
-
+	);
 };

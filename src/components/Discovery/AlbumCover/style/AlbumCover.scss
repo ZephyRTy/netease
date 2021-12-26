@@ -4,7 +4,7 @@
 
 	&-album-image {
 		position: relative;
-		height: 130px;
+		height: auto;
 		margin-top: 15px;
 
 		&-cover {
@@ -12,7 +12,6 @@
 			background-position: 0 -845px;
 		}
 	}
-
 	&-album-name {
 		width: 130px;
 		color: #000;

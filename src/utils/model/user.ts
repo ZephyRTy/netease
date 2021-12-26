@@ -54,14 +54,11 @@ export class User {
 		this.createdPlaylists.length = 0;
 		this.subPlaylists.length = 0;
 		await axios
-			.get(`${serverPath}/login/${mode}`, {
-				params: {
-					phone,
-					password,
-					realIP
-				}
-			})
+			.get(
+				`${serverPath}/login/${mode}?phone=${phone}&password=${password}&realIP=${realIP}`
+			)
 			.then((res) => {
+				console.log(res);
 				if (res.data.code === 502) {
 					throw new Error('密码错误');
 				}
