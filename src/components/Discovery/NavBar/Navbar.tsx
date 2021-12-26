@@ -11,7 +11,7 @@ export const Navbar = () => {
 							{item.title === '我的音乐' ? (
 								<a href="#/playlist/">{item.title}</a>
 							) : (
-								item.title
+								<a href="#/">{item.title}</a>
 							)}
 						</li>
 					);
