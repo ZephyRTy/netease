@@ -25,7 +25,9 @@ export class Timer {
 			if (this.current >= this.lyrics.length || !this.id) {
 				return;
 			}
-			if (this.interval === this.lyrics[this.current].time) {
+			console.log(this.interval + '/' + this.lyrics[this.current].time);
+
+			while (this.interval === this.lyrics[this.current].time) {
 				if (this.current) {
 					this.lyrics[this.current - 1].unfocus();
 				}
